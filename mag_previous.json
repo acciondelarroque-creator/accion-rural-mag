@@ -1,0 +1,36 @@
+{
+  "source_id": "guarino-max-corriente2-grupos-v5",
+  "values": {
+    "novillos_431_460": 4800.0,
+    "novillos_461_490": 4600.0,
+    "novillos_491_520": null,
+    "novillos_mas_520": null,
+    "novillos_regulares": 4200.0,
+    "novillitos_300_350": null,
+    "novillitos_351_390": 5000.0,
+    "novillitos_391_430": 4800.0,
+    "novillitos_regulares": 4500.0,
+    "vaquillonas_300_350": 5100.0,
+    "vaquillonas_351_390": 4600.0,
+    "vaquillonas_391_430": null,
+    "vaquillonas_regulares": 4400.0,
+    "vacas_buenas_especiales": 3600.0,
+    "vacas_regulares": 3300.0,
+    "toros_buenos_especiales": 3300.0,
+    "toros_regulares": null
+  },
+  "group_values": {
+    "NOVILLOS": 4533.33,
+    "NOVILLITOS": 4766.67,
+    "VAQUILLONAS": 4700.0,
+    "VACAS": 3450.0,
+    "TOROS": 3300.0
+  },
+  "heads": 3398,
+  "date": "28/08/2026",
+  "indices": {
+    "inmag_novillo": 4433.12,
+    "igmag_general": 3779.4,
+    "arrendamiento": 4519.7
+  }
+}
