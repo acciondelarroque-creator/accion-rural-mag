@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 BASE_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
-SOURCE_ID = "guarino-max-corriente2-grupos-v5"
+SOURCE_ID = "guarino-completo-v6"
 
 CATEGORIAS = {
     "novillos_431_460": "Novillos 431/460",
@@ -27,6 +27,8 @@ CATEGORIAS = {
     "vaquillonas_regulares": "Vaquillonas regulares",
     "vacas_buenas_especiales": "Vacas (buenas a especiales)",
     "vacas_regulares": "Vacas regulares",
+    "conserva_buena": "Vacas conserva buena",
+    "conserva_inferior": "Vacas conserva inferior",
     "toros_buenos_especiales": "Toros (buenos a especiales)",
     "toros_regulares": "Toros regulares",
 }
@@ -36,151 +38,147 @@ GRUPOS = {
     "NOVILLITOS": ["novillitos_300_350", "novillitos_351_390", "novillitos_391_430", "novillitos_regulares"],
     "VAQUILLONAS": ["vaquillonas_300_350", "vaquillonas_351_390", "vaquillonas_391_430", "vaquillonas_regulares"],
     "VACAS": ["vacas_buenas_especiales", "vacas_regulares"],
+    "CONSERVA": ["conserva_buena", "conserva_inferior"],
     "TOROS": ["toros_buenos_especiales", "toros_regulares"],
 }
-
-
-def limpiar_token(token):
-    return re.sub(r"\s+", " ", token.strip())
 
 
 def numero_argentino(token):
     if token is None:
         return None
-    token = limpiar_token(token).replace("$", "")
-    if token in {"", "—", "-"}:
+    token = str(token).strip().replace("$", "").replace(" ", "")
+    if token in {"", "—", "-", "–"}:
         return None
     token = token.replace(".", "").replace(",", ".")
     try:
         return float(token)
-    except (TypeError, ValueError):
+    except ValueError:
         return None
 
 
 def obtener_pagina():
-    headers = {"User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/1.0)"}
-    respuesta = requests.get(BASE_URL, headers=headers, timeout=30)
+    respuesta = requests.get(BASE_URL, headers={"User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/1.0)"}, timeout=30)
     respuesta.raise_for_status()
     return respuesta.text
 
 
-def obtener_indices(texto):
-    def indice(etiqueta):
-        patron = rf"{etiqueta}\s*([\d.]+,\d{{3}})\s*([+-]?\d+(?:,\d+)?)%"
-        match = re.search(patron, texto, re.IGNORECASE)
-        if not match:
-            return None, None
-        return numero_argentino(match.group(1)), float(match.group(2).replace(",", "."))
-
-    inmag, inmag_change = indice("INMAG")
-    igmag, igmag_change = indice("IGMAG")
-
-    arr_match = re.search(r"([\d.]+,\d{2,3})\s*Índice\s+Arrendamiento", texto, re.IGNORECASE)
-    if not arr_match:
-        arr_match = re.search(r"Índice\s+Arrendamiento\s*[:：]?\s*([\d.]+,\d{2,3})", texto, re.IGNORECASE)
-    arrendamiento = numero_argentino(arr_match.group(1)) if arr_match else None
-
-    arr_change_match = re.search(r"Índice\s+Arrendamiento\s*([+-]?\d+(?:,\d+)?)%\s*Var\.\s*Arrendamiento", texto, re.IGNORECASE)
-    if not arr_change_match:
-        arr_change_match = re.search(r"Var\.\s*Arrendamiento\s*([+-]?\d+(?:,\d+)?)%", texto, re.IGNORECASE)
-    arr_change = float(arr_change_match.group(1).replace(",", ".")) if arr_change_match else None
-    return {
-        "inmag_novillo": inmag,
-        "igmag_general": igmag,
-        "arrendamiento": arrendamiento,
-    }, {
-        "inmag_novillo": inmag_change,
-        "igmag_general": igmag_change,
-        "arrendamiento": arr_change,
-    }
-
-
-def extraer_corriente_maximo(texto, nombre):
-    precio = r"(?:\$\s*)?([0-9][0-9.]*(?:,[0-9]+)?|—)"
-    patron = re.escape(nombre) + rf"\s+{precio}\s+{precio}\s+{precio}"
-    match = re.search(patron, texto, re.IGNORECASE)
-    return numero_argentino(match.group(2)) if match else None
-
-
-def obtener_fecha(texto):
-    meses = {
-        "enero": "01", "febrero": "02", "marzo": "03", "abril": "04", "mayo": "05", "junio": "06",
-        "julio": "07", "agosto": "08", "septiembre": "09", "setiembre": "09", "octubre": "10", "noviembre": "11", "diciembre": "12",
-    }
-    patrones = [
-        r"(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})",
-        r"(\d{1,2})\s*/\s*(\d{1,2})\s*/\s*(\d{4})",
-        r"(\d{1,2})\s*-\s*(\d{1,2})\s*-\s*(\d{4})",
-    ]
-    for patron in patrones:
-        match = re.search(patron, texto, re.IGNORECASE)
-        if not match:
-            continue
-        grupos = match.groups()
-        if len(grupos) == 3 and grupos[1].lower() in meses:
-            return f"{grupos[0].zfill(2)}/{meses[grupos[1].lower()]}/{grupos[2]}"
-        return f"{grupos[0].zfill(2)}/{grupos[1].zfill(2)}/{grupos[2]}"
+def fecha_es(texto):
+    meses = {"enero":"01","febrero":"02","marzo":"03","abril":"04","mayo":"05","junio":"06","julio":"07","agosto":"08","septiembre":"09","setiembre":"09","octubre":"10","noviembre":"11","diciembre":"12"}
+    m = re.search(r"(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})", texto, re.I)
+    if m:
+        return f"{int(m.group(1)):02d}/{meses[m.group(2).lower()]}/{m.group(3)}"
     return None
 
 
-def promedio_grupo(valores, claves):
-    disponibles = [valores.get(clave) for clave in claves if valores.get(clave) is not None]
-    return round(sum(disponibles) / len(disponibles), 2) if disponibles else None
+def variacion(actual, anterior):
+    if actual is None or anterior in (None, 0):
+        return None
+    return round((actual - anterior) / anterior * 100, 2)
 
 
-def obtener_ultima_rueda():
-    html = obtener_pagina()
-    soup = BeautifulSoup(html, "html.parser")
-    texto = soup.get_text(" ", strip=True)
-    fecha_publicada = obtener_fecha(texto)
-    entrada_match = re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas", texto, re.IGNORECASE)
-    cabezas = int(entrada_match.group(1).replace(".", "")) if entrada_match else None
-    valores = {clave: extraer_corriente_maximo(texto, nombre) for clave, nombre in CATEGORIAS.items()}
-    if not fecha_publicada:
-        raise RuntimeError("No se pudo determinar la fecha de la rueda MAG en Guarino")
-    if all(valor is None for valor in valores.values()):
-        raise RuntimeError("No se encontraron las categorías de precios MAG en Guarino")
-    indices, indices_changes = obtener_indices(texto)
-    grupos = {nombre: promedio_grupo(valores, claves) for nombre, claves in GRUPOS.items()}
-    return fecha_publicada, valores, grupos, cabezas, indices, indices_changes
+def parsear_tabla(soup):
+    filas = {}
+    for table in soup.find_all("table"):
+        headers = [x.get_text(" ", strip=True).lower() for x in table.find_all("th")]
+        if not headers or "mín. corriente" not in " | ".join(headers) or "máximos" not in " | ".join(headers):
+            continue
+        for tr in table.find_all("tr"):
+            cells = [x.get_text(" ", strip=True) for x in tr.find_all(["td", "th"])]
+            if len(cells) < 5 or cells[0].upper() in {"CATEGORÍA", "NOVILLOS", "NOVILLITOS", "VAQUILLONAS", "VACAS", "CONSERVA", "TOROS"}:
+                continue
+            nombre = cells[0].lower()
+            clave = None
+            for k, etiqueta in CATEGORIAS.items():
+                if nombre == etiqueta.lower():
+                    clave = k
+                    break
+            if clave:
+                filas[clave] = {
+                    "min_corriente": numero_argentino(cells[1]),
+                    "max_corriente": numero_argentino(cells[2]),
+                    "maximo": numero_argentino(cells[3]),
+                    "kilos": numero_argentino(cells[4].replace("Kg.", "")),
+                }
+    if not filas:
+        raise RuntimeError("No se encontró la tabla de precios MAG")
+    return filas
+
+
+def indices(texto):
+    def buscar(etiqueta):
+        m = re.search(rf"{etiqueta}\s*([\d.]+,\d{{3}})\s*([+-]?\d+(?:,\d+)?)%", texto, re.I)
+        return (numero_argentino(m.group(1)), float(m.group(2).replace(",", "."))) if m else (None, None)
+    inmag, inmag_var = buscar("INMAG")
+    igmag, igmag_var = buscar("IGMAG")
+    arr = re.search(r"([\d.]+,\d{2,3})\s+Índice Arrendamiento", texto, re.I)
+    arr_var = re.search(r"([+-]?\d+(?:,\d+)?)%Var\. Arrendamiento", texto, re.I)
+    arr_val = numero_argentino(arr.group(1)) if arr else None
+    arr_change = float(arr_var.group(1).replace(",", ".")) if arr_var else None
+    monthly = {}
+    patrones = {
+        "inmag_novillo": r"Promedio Mensual ConsolidadoJulio 2026:\s*([\d.]+,\d{3})\s*Variación:\s*([+-]?\d+(?:,\d+)?)%",
+        "igmag_general": r"IGMAG[^\n]*?Promedio Mensual ConsolidadoJulio 2026:\s*([\d.]+,\d{3})\s*Variación:\s*([+-]?\d+(?:,\d+)?)%",
+        "arrendamiento": r"ÍNDICE SUGERIDO ARRENDAMIENTOS RURALES[^\n]*?Promedio Mensual ConsolidadoJulio 2026:\s*([\d.]+,\d{3})\s*Variación:\s*([+-]?\d+(?:,\d+)?)%",
+    }
+    for k, patron in patrones.items():
+        m = re.search(patron, texto, re.I)
+        if m:
+            monthly[k] = {"promedio": numero_argentino(m.group(1)), "variacion": float(m.group(2).replace(",", "."))}
+    return {"inmag_novillo": inmag, "igmag_general": igmag, "arrendamiento": arr_val}, {"inmag_novillo": inmag_var, "igmag_general": igmag_var, "arrendamiento": arr_change}, monthly
 
 
 def cargar_anterior():
-    if not os.path.exists(STATE_FILE):
-        return {}
     try:
-        with open(STATE_FILE, "r", encoding="utf-8") as archivo:
-            return json.load(archivo)
+        with open(STATE_FILE, "r", encoding="utf-8") as f:
+            return json.load(f)
     except (OSError, json.JSONDecodeError):
         return {}
 
 
 def main():
-    fecha_publicada, valores, grupos, cabezas, indices, indices_changes = obtener_ultima_rueda()
+    html = obtener_pagina()
+    soup = BeautifulSoup(html, "html.parser")
+    texto = soup.get_text(" ", strip=True)
+    fecha = fecha_es(texto)
+    if not fecha:
+        raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
+    filas = parsear_tabla(soup)
+    entrada = re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas", texto, re.I)
+    camiones = re.search(r"([\d.]+)\s+Camiones", texto, re.I)
+    semana = re.search(r"([\d.]+)\s+Cabezas semana", texto, re.I)
+    cabezas = int(entrada.group(1).replace(".", "")) if entrada else None
+    trucks = int(camiones.group(1).replace(".", "")) if camiones else None
+    week_heads = int(semana.group(1).replace(".", "")) if semana else None
+    indices_data, indices_changes, indices_monthly = indices(texto)
     anterior = cargar_anterior()
-    if fecha_publicada == anterior.get("date") and anterior.get("source_id") == SOURCE_ID:
-        print(f"MAG: sin rueda nueva ({fecha_publicada}).")
-        return
+    old = anterior.get("prices", {})
+    for clave, fila in filas.items():
+        oldfila = old.get(clave, {}) if isinstance(old.get(clave, {}), dict) else {}
+        fila["changes"] = {
+            "min_corriente": variacion(fila["min_corriente"], oldfila.get("min_corriente")),
+            "max_corriente": variacion(fila["max_corriente"], oldfila.get("max_corriente")),
+            "maximo": variacion(fila["maximo"], oldfila.get("maximo")),
+        }
     datos = {
         "updated": datetime.now(timezone.utc).isoformat(),
         "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
         "url": BASE_URL,
-        "date": fecha_publicada,
+        "date": fecha,
         "heads": cabezas,
-        "label": "Corrientes Máximos",
-        "source_field": "Máx. Corriente (Corriente 2)",
+        "trucks": trucks,
+        "week_heads": week_heads,
+        "label": "Mín. Corriente / Máx. Corriente / Máximos",
         "categories": CATEGORIAS,
         "groups": GRUPOS,
-        "group_values": grupos,
-        "values": valores,
-        "changes": {clave: None for clave in grupos},
-        "indices": indices,
+        "prices": filas,
+        "indices": indices_data,
         "indices_changes": indices_changes,
+        "indices_monthly": indices_monthly,
     }
-    with open(OUTPUT_FILE, "w", encoding="utf-8") as archivo:
-        json.dump(datos, archivo, ensure_ascii=False, indent=2)
-    with open(STATE_FILE, "w", encoding="utf-8") as archivo:
-        json.dump({"source_id": SOURCE_ID, "values": valores, "group_values": grupos, "heads": cabezas, "date": fecha_publicada, "indices": indices}, archivo, ensure_ascii=False, indent=2)
+    with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
+        json.dump(datos, f, ensure_ascii=False, indent=2)
+    with open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump({"source_id": SOURCE_ID, "date": fecha, "prices": filas, "indices": indices_data}, f, ensure_ascii=False, indent=2)
     print(json.dumps(datos, ensure_ascii=False, indent=2))
 
 
