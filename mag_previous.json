@@ -213,8 +213,8 @@
     }
   },
   "indices": {
-    "inmag_novillo": null,
-    "igmag_general": null,
-    "arrendamiento": null
+    "inmag_novillo": 4263.28,
+    "igmag_general": 3889.14,
+    "arrendamiento": 3889.14
   }
 }
