@@ -8,9 +8,9 @@
       "maximo": 4800.0,
       "kilos": 448.0,
       "changes": {
-        "min_corriente": 3.53,
+        "min_corriente": 0.0,
         "max_corriente": 0.0,
-        "maximo": -4.38
+        "maximo": 0.0
       }
     },
     "novillos_461_490": {
@@ -19,9 +19,9 @@
       "maximo": 4750.0,
       "kilos": 465.0,
       "changes": {
-        "min_corriente": 4.76,
+        "min_corriente": 0.0,
         "max_corriente": 0.0,
-        "maximo": 2.15
+        "maximo": 0.0
       }
     },
     "novillos_491_520": {
@@ -30,8 +30,8 @@
       "maximo": 4600.0,
       "kilos": 496.0,
       "changes": {
-        "min_corriente": null,
-        "max_corriente": null,
+        "min_corriente": 0.0,
+        "max_corriente": 0.0,
         "maximo": 0.0
       }
     },
@@ -43,7 +43,7 @@
       "changes": {
         "min_corriente": null,
         "max_corriente": null,
-        "maximo": -2.13
+        "maximo": 0.0
       }
     },
     "novillos_regulares": {
@@ -64,8 +64,8 @@
       "kilos": 342.0,
       "changes": {
         "min_corriente": null,
-        "max_corriente": null,
-        "maximo": 0.94
+        "max_corriente": 0.0,
+        "maximo": 0.0
       }
     },
     "novillitos_351_390": {
@@ -76,7 +76,7 @@
       "changes": {
         "min_corriente": 0.0,
         "max_corriente": 0.0,
-        "maximo": 0.4
+        "maximo": 0.0
       }
     },
     "novillitos_391_430": {
@@ -107,9 +107,9 @@
       "maximo": 5100.0,
       "kilos": 290.0,
       "changes": {
-        "min_corriente": 2.13,
+        "min_corriente": 0.0,
         "max_corriente": 0.0,
-        "maximo": -1.92
+        "maximo": 0.0
       }
     },
     "vaquillonas_351_390": {
@@ -119,7 +119,7 @@
       "kilos": 352.0,
       "changes": {
         "min_corriente": 0.0,
-        "max_corriente": 2.17,
+        "max_corriente": 0.0,
         "maximo": 0.0
       }
     },
@@ -152,8 +152,8 @@
       "kilos": 470.0,
       "changes": {
         "min_corriente": 0.0,
-        "max_corriente": 2.78,
-        "maximo": -10.0
+        "max_corriente": 0.0,
+        "maximo": 0.0
       }
     },
     "vacas_regulares": {
@@ -175,7 +175,7 @@
       "changes": {
         "min_corriente": null,
         "max_corriente": 0.0,
-        "maximo": 3.45
+        "maximo": 0.0
       }
     },
     "conserva_inferior": {
@@ -196,8 +196,8 @@
       "kilos": 711.0,
       "changes": {
         "min_corriente": null,
-        "max_corriente": 6.06,
-        "maximo": -2.63
+        "max_corriente": 0.0,
+        "maximo": 0.0
       }
     },
     "toros_regulares": {
@@ -206,7 +206,7 @@
       "maximo": null,
       "kilos": null,
       "changes": {
-        "min_corriente": 7.69,
+        "min_corriente": 0.0,
         "max_corriente": null,
         "maximo": null
       }
