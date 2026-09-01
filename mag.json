@@ -3,251 +3,43 @@
   "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
   "url": "https://www.grupoguarino.com.ar/precios-mag/",
   "date": "01/09/2026",
-  "heads": 7234,
-  "trucks": 195,
-  "week_heads": 7234,
+  "heads": 7233,
+  "trucks": 185,
+  "week_heads": 7233,
   "label": "Mín. Corriente / Máx. Corriente / Máximos",
   "categories": {
-    "novillos_431_460": "Novillos 431/460",
-    "novillos_461_490": "Novillos 461/490",
-    "novillos_491_520": "Novillos 491/520",
-    "novillos_mas_520": "Novillos +520",
-    "novillos_regulares": "Novillos regulares",
-    "novillitos_300_350": "Novillitos 300/350",
-    "novillitos_351_390": "Novillitos 351/390",
-    "novillitos_391_430": "Novillitos 391/430",
-    "novillitos_regulares": "Novillitos regulares",
-    "vaquillonas_300_350": "Vaquillonas 300/350",
-    "vaquillonas_351_390": "Vaquillonas 351/390",
-    "vaquillonas_391_430": "Vaquillonas 391/430",
-    "vaquillonas_regulares": "Vaquillonas regulares",
-    "vacas_buenas_especiales": "Vacas (buenas a especiales)",
-    "vacas_regulares": "Vacas regulares",
-    "conserva_buena": "Vacas conserva buena",
-    "conserva_inferior": "Vacas conserva inferior",
-    "toros_buenos_especiales": "Toros (buenos a especiales)",
-    "toros_regulares": "Toros regulares"
+    "novillos_431_460": "Novillos 431/460", "novillos_461_490": "Novillos 461/490", "novillos_491_520": "Novillos 491/520", "novillos_mas_520": "Novillos +520", "novillos_regulares": "Novillos regulares",
+    "novillitos_300_350": "Novillitos 300/350", "novillitos_351_390": "Novillitos 351/390", "novillitos_391_430": "Novillitos 391/430", "novillitos_regulares": "Novillitos regulares",
+    "vaquillonas_300_350": "Vaquillonas 300/350", "vaquillonas_351_390": "Vaquillonas 351/390", "vaquillonas_391_430": "Vaquillonas 391/430", "vaquillonas_regulares": "Vaquillonas regulares",
+    "vacas_buenas_especiales": "Vacas (buenas a especiales)", "vacas_regulares": "Vacas regulares", "conserva_buena": "Vacas conserva buena", "conserva_inferior": "Vacas conserva inferior",
+    "toros_buenos_especiales": "Toros (buenos a especiales)", "toros_regulares": "Toros regulares"
   },
   "prices": {
-    "novillos_431_460": {
-      "min_corriente": 4400.0,
-      "max_corriente": 4800.0,
-      "maximo": 4800.0,
-      "kilos": 448.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillos_461_490": {
-      "min_corriente": 4400.0,
-      "max_corriente": 4600.0,
-      "maximo": 4750.0,
-      "kilos": 465.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillos_491_520": {
-      "min_corriente": 4200.0,
-      "max_corriente": 4500.0,
-      "maximo": 4600.0,
-      "kilos": 496.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillos_mas_520": {
-      "min_corriente": null,
-      "max_corriente": null,
-      "maximo": 4600.0,
-      "kilos": 565.0,
-      "changes": {
-        "min_corriente": null,
-        "max_corriente": null,
-        "maximo": 0.0
-      }
-    },
-    "novillos_regulares": {
-      "min_corriente": 3800.0,
-      "max_corriente": 4200.0,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": null
-      }
-    },
-    "novillitos_300_350": {
-      "min_corriente": null,
-      "max_corriente": 5100.0,
-      "maximo": 5350.0,
-      "kilos": 342.0,
-      "changes": {
-        "min_corriente": null,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillitos_351_390": {
-      "min_corriente": 4700.0,
-      "max_corriente": 5000.0,
-      "maximo": 5020.0,
-      "kilos": 369.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillitos_391_430": {
-      "min_corriente": 4500.0,
-      "max_corriente": 4800.0,
-      "maximo": 5120.0,
-      "kilos": 403.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "novillitos_regulares": {
-      "min_corriente": 4200.0,
-      "max_corriente": 4500.0,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": null
-      }
-    },
-    "vaquillonas_300_350": {
-      "min_corriente": 4800.0,
-      "max_corriente": 5100.0,
-      "maximo": 5100.0,
-      "kilos": 290.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "vaquillonas_351_390": {
-      "min_corriente": 4400.0,
-      "max_corriente": 4700.0,
-      "maximo": 4900.0,
-      "kilos": 352.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "vaquillonas_391_430": {
-      "min_corriente": null,
-      "max_corriente": null,
-      "maximo": 4600.0,
-      "kilos": 395.0,
-      "changes": {
-        "min_corriente": null,
-        "max_corriente": null,
-        "maximo": 0.0
-      }
-    },
-    "vaquillonas_regulares": {
-      "min_corriente": 4000.0,
-      "max_corriente": 4400.0,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": null
-      }
-    },
-    "vacas_buenas_especiales": {
-      "min_corriente": 3300.0,
-      "max_corriente": 3700.0,
-      "maximo": 4050.0,
-      "kilos": 470.0,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "vacas_regulares": {
-      "min_corriente": 3000.0,
-      "max_corriente": 3300.0,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": 0.0,
-        "maximo": null
-      }
-    },
-    "conserva_buena": {
-      "min_corriente": null,
-      "max_corriente": 2800.0,
-      "maximo": 3000.0,
-      "kilos": null,
-      "changes": {
-        "min_corriente": null,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "conserva_inferior": {
-      "min_corriente": 2600.0,
-      "max_corriente": null,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": null,
-        "maximo": null
-      }
-    },
-    "toros_buenos_especiales": {
-      "min_corriente": null,
-      "max_corriente": 3500.0,
-      "maximo": 3700.0,
-      "kilos": 711.0,
-      "changes": {
-        "min_corriente": null,
-        "max_corriente": 0.0,
-        "maximo": 0.0
-      }
-    },
-    "toros_regulares": {
-      "min_corriente": 2800.0,
-      "max_corriente": null,
-      "maximo": null,
-      "kilos": null,
-      "changes": {
-        "min_corriente": 0.0,
-        "max_corriente": null,
-        "maximo": null
-      }
-    }
+    "novillos_431_460": {"min_corriente": 4400.0, "max_corriente": 4800.0, "maximo": 4800.0, "kilos": 448.0, "changes": {"min_corriente": 3.53, "max_corriente": 0.0, "maximo": -4.38}},
+    "novillos_461_490": {"min_corriente": 4400.0, "max_corriente": 4600.0, "maximo": 4750.0, "kilos": 465.0, "changes": {"min_corriente": 4.76, "max_corriente": 0.0, "maximo": 2.15}},
+    "novillos_491_520": {"min_corriente": 4200.0, "max_corriente": 4500.0, "maximo": 4600.0, "kilos": 496.0, "changes": {"min_corriente": null, "max_corriente": null, "maximo": 0.0}},
+    "novillos_mas_520": {"min_corriente": null, "max_corriente": null, "maximo": 4600.0, "kilos": 565.0, "changes": {"min_corriente": null, "max_corriente": null, "maximo": -2.13}},
+    "novillos_regulares": {"min_corriente": 3800.0, "max_corriente": 4200.0, "maximo": null, "kilos": null, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": null}},
+    "novillitos_300_350": {"min_corriente": null, "max_corriente": 5100.0, "maximo": 5350.0, "kilos": 342.0, "changes": {"min_corriente": null, "max_corriente": null, "maximo": 0.94}},
+    "novillitos_351_390": {"min_corriente": 4700.0, "max_corriente": 5000.0, "maximo": 5020.0, "kilos": 369.0, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": 0.40}},
+    "novillitos_391_430": {"min_corriente": 4500.0, "max_corriente": 4800.0, "maximo": 5120.0, "kilos": 403.0, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": 0.0}},
+    "novillitos_regulares": {"min_corriente": 4200.0, "max_corriente": 4500.0, "maximo": null, "kilos": null, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": null}},
+    "vaquillonas_300_350": {"min_corriente": 4800.0, "max_corriente": 5100.0, "maximo": 5100.0, "kilos": 290.0, "changes": {"min_corriente": 2.13, "max_corriente": 0.0, "maximo": -1.92}},
+    "vaquillonas_351_390": {"min_corriente": 4400.0, "max_corriente": 4700.0, "maximo": 4900.0, "kilos": 352.0, "changes": {"min_corriente": 0.0, "max_corriente": 2.17, "maximo": 0.0}},
+    "vaquillonas_391_430": {"min_corriente": null, "max_corriente": null, "maximo": 4600.0, "kilos": 395.0, "changes": {"min_corriente": null, "max_corriente": null, "maximo": 0.0}},
+    "vaquillonas_regulares": {"min_corriente": 4000.0, "max_corriente": 4400.0, "maximo": null, "kilos": null, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": null}},
+    "vacas_buenas_especiales": {"min_corriente": 3300.0, "max_corriente": 3700.0, "maximo": 4050.0, "kilos": 470.0, "changes": {"min_corriente": 0.0, "max_corriente": 2.78, "maximo": -10.0}},
+    "vacas_regulares": {"min_corriente": 3000.0, "max_corriente": 3300.0, "maximo": null, "kilos": null, "changes": {"min_corriente": 0.0, "max_corriente": 0.0, "maximo": null}},
+    "conserva_buena": {"min_corriente": null, "max_corriente": 2800.0, "maximo": 3000.0, "kilos": null, "changes": {"min_corriente": null, "max_corriente": 0.0, "maximo": 3.45}},
+    "conserva_inferior": {"min_corriente": 2600.0, "max_corriente": null, "maximo": null, "kilos": null, "changes": {"min_corriente": 0.0, "max_corriente": null, "maximo": null}},
+    "toros_buenos_especiales": {"min_corriente": null, "max_corriente": 3500.0, "maximo": 3700.0, "kilos": 711.0, "changes": {"min_corriente": null, "max_corriente": 6.06, "maximo": -2.63}},
+    "toros_regulares": {"min_corriente": 2800.0, "max_corriente": null, "maximo": null, "kilos": null, "changes": {"min_corriente": 7.69, "max_corriente": null, "maximo": null}}
   },
-  "indices": {
-    "inmag_novillo": 4263.28,
-    "igmag_general": 3889.14,
-    "arrendamiento": 3889.14
-  },
-  "indices_changes": {
-    "inmag_novillo": -3.8,
-    "igmag_general": 2.9,
-    "arrendamiento": 2.9
-  },
-  "indices_monthly": {}
+  "indices": {"inmag_novillo": 4433.120, "igmag_general": 3779.400, "arrendamiento": 4519.700},
+  "indices_changes": {"inmag_novillo": 7.8, "igmag_general": 1.5, "arrendamiento": 6.5},
+  "indices_monthly": {
+    "inmag_novillo": {"promedio": 4304.619, "variacion": -0.3},
+    "igmag_general": {"promedio": 3834.474, "variacion": 3.1},
+    "arrendamiento": {"promedio": 4373.766, "variacion": 0.5}
+  }
 }
