@@ -1,5 +1,4 @@
 import json
-import os
 import re
 from datetime import datetime, timezone
 
@@ -21,11 +20,15 @@ CATEGORIAS = {
 
 
 def numero_argentino(token):
-    if token is None: return None
+    if token is None:
+        return None
     token = str(token).strip().replace("$", "").replace(" ", "")
-    if token in {"", "—", "-", "–"}: return None
-    try: return float(token.replace(".", "").replace(",", "."))
-    except ValueError: return None
+    if token in {"", "—", "-", "–"}:
+        return None
+    try:
+        return float(token.replace(".", "").replace(",", "."))
+    except ValueError:
+        return None
 
 
 def obtener_pagina():
@@ -41,7 +44,8 @@ def fecha_es(texto):
 
 
 def variacion(actual, anterior):
-    if actual is None or anterior in (None, 0): return None
+    if actual is None or anterior in (None, 0):
+        return None
     return round((actual-anterior)/anterior*100,2)
 
 
@@ -49,22 +53,26 @@ def parsear_tabla(soup):
     filas={}
     for table in soup.find_all("table"):
         headers=[x.get_text(" ",strip=True).lower() for x in table.find_all("th")]
-        if not headers or "mín. corriente" not in " | ".join(headers) or "máximos" not in " | ".join(headers): continue
+        if not headers or "mín. corriente" not in " | ".join(headers) or "máximos" not in " | ".join(headers):
+            continue
         for tr in table.find_all("tr"):
             cells=[x.get_text(" ",strip=True) for x in tr.find_all(["td","th"])]
-            if len(cells)<5: continue
+            if len(cells)<5:
+                continue
             nombre=cells[0].lower()
             clave=next((k for k,v in CATEGORIAS.items() if nombre==v.lower()),None)
             if clave:
                 filas[clave]={"min_corriente":numero_argentino(cells[1]),"max_corriente":numero_argentino(cells[2]),"maximo":numero_argentino(cells[3]),"kilos":numero_argentino(cells[4].replace("Kg.",""))}
-    if not filas: raise RuntimeError("No se encontró la tabla de precios MAG")
+    if not filas:
+        raise RuntimeError("No se encontró la tabla de precios MAG")
     return filas
 
 
 def indices(texto):
     def ultimos(etiqueta):
         ms=re.findall(rf"{etiqueta}\s*([\d.]+,\d{{3}})\s*([+-]?\d+(?:,\d+)?)%",texto,re.I)
-        if not ms: return None,None
+        if not ms:
+            return None,None
         a,b=ms[-1]
         return numero_argentino(a),float(b.replace(",","."))
     inmag,inmag_var=ultimos("INMAG")
@@ -81,28 +89,65 @@ def indices(texto):
     return {"inmag_novillo":inmag,"igmag_general":igmag,"arrendamiento":arr_val},{"inmag_novillo":inmag_var,"igmag_general":igmag_var,"arrendamiento":arr_var},monthly
 
 
-def cargar_anterior():
+def cargar_estado():
     try:
-        with open(STATE_FILE,"r",encoding="utf-8") as f:return json.load(f)
-    except (OSError,json.JSONDecodeError): return {}
+        with open(STATE_FILE,"r",encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError,json.JSONDecodeError):
+        return {}
 
 
 def main():
-    html=obtener_pagina(); soup=BeautifulSoup(html,"html.parser"); texto=soup.get_text(" ",strip=True)
+    html=obtener_pagina()
+    soup=BeautifulSoup(html,"html.parser")
+    texto=soup.get_text(" ",strip=True)
     fecha=fecha_es(texto)
-    if not fecha: raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
+    if not fecha:
+        raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
+
     filas=parsear_tabla(soup)
-    m=re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas",texto,re.I); cabezas=int(m.group(1).replace(".","")) if m else None
-    m=re.search(r"([\d.]+)\s+Camiones",texto,re.I); trucks=int(m.group(1).replace(".","")) if m else None
-    m=re.search(r"([\d.]+)\s+Cabezas semana",texto,re.I); week_heads=int(m.group(1).replace(".","")) if m else None
+    m=re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas",texto,re.I)
+    cabezas=int(m.group(1).replace(".","")) if m else None
+    m=re.search(r"([\d.]+)\s+Camiones",texto,re.I)
+    trucks=int(m.group(1).replace(".","")) if m else None
+    m=re.search(r"([\d.]+)\s+Cabezas semana",texto,re.I)
+    week_heads=int(m.group(1).replace(".","")) if m else None
     idx,idx_changes,idx_monthly=indices(texto)
-    anterior=cargar_anterior(); old=anterior.get("prices",{})
+
+    estado=cargar_estado()
+
+    # La comparación es contra la rueda anterior, nunca contra una actualización
+    # intradiaria de 30 minutos. La base queda fija durante toda la rueda.
+    if "baseline_date" in estado and "baseline_prices" in estado:
+        if fecha != estado.get("last_date"):
+            baseline_date=estado.get("last_date")
+            baseline_prices=estado.get("last_prices",estado.get("baseline_prices",{}))
+        else:
+            baseline_date=estado.get("baseline_date")
+            baseline_prices=estado.get("baseline_prices",{})
+    else:
+        baseline_date=estado.get("date")
+        baseline_prices=estado.get("prices",{})
+
     for k,fila in filas.items():
-        o=old.get(k,{}) if isinstance(old.get(k,{}),dict) else {}
-        fila["changes"]={"min_corriente":variacion(fila["min_corriente"],o.get("min_corriente")),"max_corriente":variacion(fila["max_corriente"],o.get("max_corriente")),"maximo":variacion(fila["maximo"],o.get("maximo"))}
-    datos={"updated":datetime.now(timezone.utc).isoformat(),"source":"Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)","url":BASE_URL,"date":fecha,"heads":cabezas,"trucks":trucks,"week_heads":week_heads,"label":"Mín. Corriente / Máx. Corriente / Máximos","categories":CATEGORIAS,"prices":filas,"indices":idx,"indices_changes":idx_changes,"indices_monthly":idx_monthly}
-    with open(OUTPUT_FILE,"w",encoding="utf-8") as f: json.dump(datos,f,ensure_ascii=False,indent=2)
-    with open(STATE_FILE,"w",encoding="utf-8") as f: json.dump({"source_id":SOURCE_ID,"date":fecha,"prices":filas,"indices":idx},f,ensure_ascii=False,indent=2)
+        o=baseline_prices.get(k,{}) if isinstance(baseline_prices.get(k,{}),dict) else {}
+        fila["changes"]={
+            "min_corriente":variacion(fila["min_corriente"],o.get("min_corriente")),
+            "max_corriente":variacion(fila["max_corriente"],o.get("max_corriente")),
+            "maximo":variacion(fila["maximo"],o.get("maximo"))
+        }
+
+    datos={"updated":datetime.now(timezone.utc).isoformat(),"source":"Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)","url":BASE_URL,"date":fecha,"comparison_date":baseline_date,"heads":cabezas,"trucks":trucks,"week_heads":week_heads,"label":"Mín. Corriente / Máx. Corriente / Máximos","categories":CATEGORIAS,"prices":filas,"indices":idx,"indices_changes":idx_changes,"indices_monthly":idx_monthly}
+    with open(OUTPUT_FILE,"w",encoding="utf-8") as f:
+        json.dump(datos,f,ensure_ascii=False,indent=2)
+
+    if fecha != estado.get("last_date"):
+        nuevo={"source_id":SOURCE_ID,"baseline_date":baseline_date,"baseline_prices":baseline_prices,"last_date":fecha,"last_prices":filas}
+    else:
+        nuevo={"source_id":SOURCE_ID,"baseline_date":estado.get("baseline_date",baseline_date),"baseline_prices":estado.get("baseline_prices",baseline_prices),"last_date":fecha,"last_prices":filas}
+    with open(STATE_FILE,"w",encoding="utf-8") as f:
+        json.dump(nuevo,f,ensure_ascii=False,indent=2)
     print(json.dumps(datos,ensure_ascii=False,indent=2))
 
-if __name__=="__main__": main()
+if __name__=="__main__":
+    main()
