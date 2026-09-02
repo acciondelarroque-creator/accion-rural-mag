@@ -1,10 +1,161 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Acción Rural · MAG Cañuelas</title><style>body{margin:0;background:#173f60;color:#fff;font-family:Georgia,"Times New Roman",serif}#mag{width:100%;min-height:100vh;overflow:hidden;position:relative}.track{display:flex;width:max-content;height:92px;align-items:stretch;animation:scroll 82s linear infinite}.track:hover{animation-play-state:paused}.header{width:215px;height:92px;flex-shrink:0;background:#10466a;border-right:1px solid #ffffff40;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:4px 10px}.header strong{font-size:18px}.header span{font-size:12px;font-weight:bold}.header small{font-family:Arial;font-size:9px}.summary{width:105px;height:92px;flex-shrink:0;border-right:1px solid #ffffff40;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}.summary strong{font-size:19px}.summary span{font:10px Arial}.dato{width:330px;height:92px;flex-shrink:0;border-right:1px solid #ffffff40;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:2px 8px;box-sizing:border-box}.titulo{display:flex;justify-content:center;align-items:baseline;gap:7px;width:100%;margin:-5px 0 5px;white-space:nowrap}.cat{font-size:15px;font-weight:bold}.rango{font-size:17px;font-weight:bold}.labels,.prices{width:100%;display:grid;grid-template-columns:31% 31% 38%;text-align:center}.labels{font:10px Arial;font-weight:bold;margin-bottom:1px}.prices strong{font-size:14px;white-space:nowrap}.prices .max strong{font-size:15px}.var{font:10px Arial;font-weight:bold;min-height:11px}.up{color:#35d878}.down{color:#ff5555}.eq{color:#d7d7d7}.none{color:#aab8c0}.indices{width:760px;height:92px;flex-shrink:0;border-right:1px solid #ffffff40;display:flex;flex-direction:column;justify-content:center;padding:4px 10px;box-sizing:border-box}.indices-title{text-align:center;font:10px Arial;font-weight:bold;margin-bottom:3px}.indices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;text-align:center}.iname{display:block;font:9px Arial;font-weight:bold;white-space:nowrap}.ival{font-size:15px;font-weight:bold;white-space:nowrap}.ivar,.iprom{font:9px Arial;font-weight:bold}.iprom{font-size:8px;font-weight:normal}@keyframes scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}@media(max-width:600px){.track{height:78px;animation-duration:68s}.header{width:175px;height:78px}.header strong{font-size:14px}.header span{font-size:10px}.summary{width:82px;height:78px}.summary strong{font-size:15px}.summary span{font-size:8px}.dato{width:300px;height:78px}.cat{font-size:12px}.rango{font-size:15px}.labels{font-size:8px}.prices strong{font-size:11px}.prices .max strong{font-size:12px}.var{font-size:8px}.indices{width:760px;height:78px}.iname{font-size:7px}.ival{font-size:12px}.ivar{font-size:7px}.iprom{font-size:6px}}
-</style></head><body><div id="mag"><div id="track" class="track"></div></div><script>
-const C={novillos_431_460:['NOVILLOS','431/460 Kg.'],novillos_461_490:['NOVILLOS','461/490 Kg.'],novillos_491_520:['NOVILLOS','491/520 Kg.'],novillos_mas_520:['NOVILLOS','+520 Kg.'],novillos_regulares:['NOVILLOS','Regulares'],novillitos_300_350:['NOVILLITOS','300/350 Kg.'],novillitos_351_390:['NOVILLITOS','351/390 Kg.'],novillitos_391_430:['NOVILLITOS','391/430 Kg.'],novillitos_regulares:['NOVILLITOS','Regulares'],vaquillonas_300_350:['VAQUILLONAS','300/350 Kg.'],vaquillonas_351_390:['VAQUILLONAS','351/390 Kg.'],vaquillonas_391_430:['VAQUILLONAS','391/430 Kg.'],vaquillonas_regulares:['VAQUILLONAS','Regulares'],vacas_buenas_especiales:['VACAS','Buenas a especiales'],vacas_regulares:['VACAS','Regulares'],conserva_buena:['CONSERVA','Buena'],conserva_inferior:['CONSERVA','Inferior'],toros_buenos_especiales:['TOROS','Buenos a especiales'],toros_regulares:['TOROS','Regulares']};
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Acción Rural · MAG Cañuelas</title>
+<style>
+/* =========================================================
+   MAG CAÑUELAS · PIZARRA
+   MISMO DISEÑO QUE LA MARQUESINA INDEPENDIENTE
+========================================================= */
+#mag-canuelas{
+    width:100%;
+    height:92px;
+    overflow:hidden;
+    position:relative;
+    background:#173f60;
+    color:#fff;
+    font-family:Georgia,"Times New Roman",serif;
+}
+#mag-canuelas .mag-track{
+    display:flex;
+    width:max-content;
+    height:92px;
+    align-items:stretch;
+    animation:mag-scroll 82s linear infinite;
+}
+#mag-canuelas:hover .mag-track{
+    animation-play-state:paused;
+}
+/* CABECERA */
+#mag-canuelas .mag-header{
+    width:215px;
+    height:92px;
+    flex-shrink:0;
+    background:#10466a;
+    border-right:1px solid rgba(255,255,255,.25);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:4px 10px;
+    box-sizing:border-box;
+}
+#mag-canuelas .mag-header strong{font-size:18px;line-height:21px}
+#mag-canuelas .mag-header span{font-size:12px;line-height:15px;font-weight:bold}
+#mag-canuelas .mag-header small{font-family:Arial,sans-serif;font-size:9px;line-height:11px;margin-top:1px}
+/* RESUMEN */
+#mag-canuelas .mag-resumen{
+    width:105px;height:92px;flex-shrink:0;
+    border-right:1px solid rgba(255,255,255,.25);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;
+}
+#mag-canuelas .mag-resumen strong{font-size:19px;line-height:22px}
+#mag-canuelas .mag-resumen span{font-size:10px;line-height:13px}
+/* DATOS */
+#mag-canuelas .mag-dato{
+    width:330px;height:92px;flex-shrink:0;
+    border-right:1px solid rgba(255,255,255,.25);
+    display:flex;flex-direction:column;justify-content:center;align-items:center;
+    padding:2px 8px;box-sizing:border-box;
+}
+#mag-canuelas .mag-titulo{
+    display:flex;justify-content:center;align-items:baseline;gap:7px;width:100%;
+    margin-top:-5px;margin-bottom:5px;white-space:nowrap;
+}
+#mag-canuelas .mag-categoria{font-size:15px;line-height:18px;font-weight:bold}
+#mag-canuelas .mag-rango{font-size:17px;line-height:19px;font-weight:bold}
+/* ETIQUETAS */
+#mag-canuelas .mag-etiquetas{
+    width:100%;display:grid;grid-template-columns:31% 31% 38%;
+    align-items:center;text-align:center;margin-bottom:1px;
+}
+#mag-canuelas .mag-etiquetas .corrientes{grid-column:1 / 3}
+#mag-canuelas .mag-etiquetas .maximo{grid-column:3}
+#mag-canuelas .mag-etiquetas span{font-family:Arial,sans-serif;font-size:10px;line-height:11px;font-weight:bold}
+/* PRECIOS */
+#mag-canuelas .mag-precios{width:100%;display:grid;grid-template-columns:31% 31% 38%;align-items:start;text-align:center}
+#mag-canuelas .mag-precio{display:flex;flex-direction:column;align-items:center;min-width:0}
+#mag-canuelas .mag-precio strong{font-size:14px;line-height:16px;white-space:nowrap}
+#mag-canuelas .mag-precio.max strong{font-size:15px}
+/* VARIACIONES */
+#mag-canuelas .mag-var{font-family:Arial,sans-serif;font-size:10px;line-height:11px;font-weight:bold;min-height:11px;white-space:nowrap}
+#mag-canuelas .suba{color:#35d878}
+#mag-canuelas .baja{color:#ff5555}
+#mag-canuelas .igual{color:#d7d7d7}
+#mag-canuelas .sin-dato{color:#aab8c0}
+/* ÍNDICES */
+#mag-canuelas .mag-indices{
+    width:760px;height:92px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.25);
+    display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;padding:4px 10px;
+}
+#mag-canuelas .mag-indices-titulo{text-align:center;font-family:Arial,sans-serif;font-size:10px;line-height:11px;font-weight:bold;margin-bottom:3px}
+#mag-canuelas .mag-indices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
+#mag-canuelas .mag-indice{text-align:center;min-width:0}
+#mag-canuelas .mag-indice-nombre{display:block;font-family:Arial,sans-serif;font-size:9px;line-height:10px;font-weight:bold;white-space:nowrap}
+#mag-canuelas .mag-indice-valor{font-size:15px;line-height:17px;font-weight:bold;white-space:nowrap}
+#mag-canuelas .mag-indice-var{font-family:Arial,sans-serif;font-size:9px;line-height:10px;font-weight:bold}
+#mag-canuelas .mag-indice-prom{display:block;font-family:Arial,sans-serif;font-size:8px;line-height:9px;white-space:nowrap}
+/* ANIMACIÓN */
+@keyframes mag-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+/* CELULAR */
+@media(max-width:600px){
+    #mag-canuelas{height:78px}
+    #mag-canuelas .mag-track{height:78px;animation-duration:68s}
+    #mag-canuelas .mag-header{width:175px;height:78px}
+    #mag-canuelas .mag-header strong{font-size:14px;line-height:17px}
+    #mag-canuelas .mag-header span{font-size:10px;line-height:12px}
+    #mag-canuelas .mag-header small{font-size:8px;line-height:9px}
+    #mag-canuelas .mag-resumen{width:82px;height:78px}
+    #mag-canuelas .mag-resumen strong{font-size:15px}
+    #mag-canuelas .mag-resumen span{font-size:8px}
+    #mag-canuelas .mag-dato{width:300px;height:78px;padding:2px 5px}
+    #mag-canuelas .mag-titulo{gap:5px;margin-top:-4px;margin-bottom:4px}
+    #mag-canuelas .mag-categoria{font-size:12px;line-height:15px}
+    #mag-canuelas .mag-rango{font-size:15px;line-height:16px}
+    #mag-canuelas .mag-etiquetas span{font-size:8px;line-height:9px}
+    #mag-canuelas .mag-precio strong{font-size:11px;line-height:13px}
+    #mag-canuelas .mag-precio.max strong{font-size:12px}
+    #mag-canuelas .mag-var{font-size:8px;line-height:9px;min-height:9px}
+    #mag-canuelas .mag-indices{width:760px;height:78px;padding:3px 6px}
+    #mag-canuelas .mag-indices-titulo{font-size:8px;line-height:9px}
+    #mag-canuelas .mag-indice-nombre{font-size:7px;line-height:8px}
+    #mag-canuelas .mag-indice-valor{font-size:12px;line-height:14px}
+    #mag-canuelas .mag-indice-var{font-size:7px;line-height:8px}
+    #mag-canuelas .mag-indice-prom{font-size:6px;line-height:7px}
+}
+</style>
+</head>
+<body>
+<div id="mag-canuelas"><div class="mag-track" id="mag-track"></div></div>
+<script>
+const C={
+ novillos_431_460:['NOVILLOS','431/460 Kg.'],novillos_461_490:['NOVILLOS','461/490 Kg.'],novillos_491_520:['NOVILLOS','491/520 Kg.'],novillos_mas_520:['NOVILLOS','+520 Kg.'],novillos_regulares:['NOVILLOS','Regulares'],
+ novillitos_300_350:['NOVILLITOS','300/350 Kg.'],novillitos_351_390:['NOVILLITOS','351/390 Kg.'],novillitos_391_430:['NOVILLITOS','391/430 Kg.'],novillitos_regulares:['NOVILLITOS','Regulares'],
+ vaquillonas_300_350:['VAQUILLONAS','300/350 Kg.'],vaquillonas_351_390:['VAQUILLONAS','351/390 Kg.'],vaquillonas_391_430:['VAQUILLONAS','391/430 Kg.'],vaquillonas_regulares:['VAQUILLONAS','Regulares'],
+ vacas_buenas_especiales:['VACAS','Buenas a especiales'],vacas_regulares:['VACAS','Regulares'],conserva_buena:['CONSERVA','Buena'],conserva_inferior:['CONSERVA','Inferior'],toros_buenos_especiales:['TOROS','Buenos a especiales'],toros_regulares:['TOROS','Regulares']
+};
 const money=n=>n==null?'—':'$'+Number(n).toLocaleString('es-AR');
 const pct=n=>n==null?'—':((n>0?'▲ ':'')+(n<0?'▼ ':'')+Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%');
-function cls(n){return n==null?'none':n>0?'up':n<0?'down':'eq'}
-function dato(k,d){let c=C[k],v=d.prices?.[k]||{},ch=v.changes||{};return `<div class="dato"><div class="titulo"><span class="cat">${c[0]}</span><span class="rango">${c[1]}</span></div><div class="labels"><span>CORRIENTES</span><span>CORRIENTES</span><span>MÁXIMO</span></div><div class="prices"><div><strong>${money(v.min_corriente)}</strong><div class="var ${cls(ch.min_corriente)}">${pct(ch.min_corriente)}</div></div><div><strong>${money(v.max_corriente)}</strong><div class="var ${cls(ch.max_corriente)}">${pct(ch.max_corriente)}</div></div><div class="max"><strong>${money(v.maximo)}</strong><div class="var ${cls(ch.maximo)}">${pct(ch.maximo)}</div></div></div></div>`}
-function indices(d){let x=d.indices||{},c=d.indices_changes||{},p=d.indices_monthly||{};return `<div class="indices"><div class="indices-title">ÍNDICES MERCADO AGROGANADERO DE CAÑUELAS (MAG) · ÚLTIMO ÍNDICE OPERADO ${d.date||''}</div><div class="indices-grid"><div><span class="iname">INMAG · NOVILLO</span><span class="ival">${Number(x.inmag_novillo||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span> <span class="ivar ${cls(c.inmag_novillo)}">${pct(c.inmag_novillo)}</span><span class="iprom">${p.inmag_novillo?`Prom. mensual julio: ${Number(p.inmag_novillo.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.inmag_novillo.variacion)}`:''}</span></div><div><span class="iname">IGMAG · GENERAL</span><span class="ival">${Number(x.igmag_general||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span> <span class="ivar ${cls(c.igmag_general)}">${pct(c.igmag_general)}</span><span class="iprom">${p.igmag_general?`Prom. mensual julio: ${Number(p.igmag_general.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.igmag_general.variacion)}`:''}</span></div><div><span class="iname">ÍNDICE SUGERIDO ARRENDAMIENTOS RURALES</span><span class="ival">${Number(x.arrendamiento||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span> <span class="ivar ${cls(c.arrendamiento)}">${pct(c.arrendamiento)}</span><span class="iprom">${p.arrendamiento?`Prom. mensual julio: ${Number(p.arrendamiento.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.arrendamiento.variacion)}`:''}</span></div></div></div>`}
-async function load(){const d=await fetch('mag.json?'+Date.now()).then(r=>r.json());let html=`<div class="header"><strong>MAG CAÑUELAS</strong><span>${d.date||''}</span><small>Fuente: Grupo Guarino</small></div><div class="summary"><strong>${Number(d.heads||0).toLocaleString('es-AR')}</strong><span>Entrada · cabezas</span></div><div class="summary"><strong>${d.trucks??'—'}</strong><span>Camiones</span></div>`;for(const k of Object.keys(C))if(d.prices?.[k])html+=dato(k,d);html+=indices(d);document.getElementById('track').innerHTML=html+html}load().catch(e=>document.getElementById('mag').innerHTML='<div style="padding:20px;font-family:Arial">No se pudieron cargar los datos MAG.</div>');
-</script></body></html>
+function cls(n){return n==null?'sin-dato':n>0?'suba':n<0?'baja':'igual'}
+function dato(k,d){
+ const c=C[k],v=d.prices?.[k]||{},ch=v.changes||{};
+ return `<div class="mag-dato"><div class="mag-titulo"><span class="mag-categoria">${c[0]}</span><span class="mag-rango">${c[1]}</span></div><div class="mag-etiquetas"><span class="corrientes">CORRIENTES</span><span class="maximo">MÁXIMO</span></div><div class="mag-precios"><div class="mag-precio"><strong>${money(v.min_corriente)}</strong><span class="mag-var ${cls(ch.min_corriente)}">${pct(ch.min_corriente)}</span></div><div class="mag-precio"><strong>${money(v.max_corriente)}</strong><span class="mag-var ${cls(ch.max_corriente)}">${pct(ch.max_corriente)}</span></div><div class="mag-precio max"><strong>${money(v.maximo)}</strong><span class="mag-var ${cls(ch.maximo)}">${pct(ch.maximo)}</span></div></div></div>`;
+}
+function indices(d){
+ const x=d.indices||{},c=d.indices_changes||{},p=d.indices_monthly||{};
+ return `<div class="mag-indices"><div class="mag-indices-titulo">ÍNDICES MERCADO AGROGANADERO DE CAÑUELAS (MAG) · ÚLTIMO ÍNDICE OPERADO ${d.index_date||'28/08/2026'}</div><div class="mag-indices-grid"><div class="mag-indice"><span class="mag-indice-nombre">INMAG · NOVILLO</span><span class="mag-indice-valor">${Number(x.inmag_novillo||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.inmag_novillo)}">${pct(c.inmag_novillo)}</span><span class="mag-indice-prom">${p.inmag_novillo?`Prom. mensual: ${Number(p.inmag_novillo.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.inmag_novillo.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-nombre">IGMAG · GENERAL</span><span class="mag-indice-valor">${Number(x.igmag_general||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.igmag_general)}">${pct(c.igmag_general)}</span><span class="mag-indice-prom">${p.igmag_general?`Prom. mensual: ${Number(p.igmag_general.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.igmag_general.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-nombre">ÍNDICE SUGERIDO ARRENDAMIENTOS RURALES</span><span class="mag-indice-valor">${Number(x.arrendamiento||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.arrendamiento)}">${pct(c.arrendamiento)}</span><span class="mag-indice-prom">${p.arrendamiento?`Prom. mensual: ${Number(p.arrendamiento.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.arrendamiento.variacion)}`:''}</span></div></div></div>`;
+}
+async function load(){
+ const d=await fetch('mag.json?'+Date.now()).then(r=>r.json());
+ let html=`<div class="mag-header"><strong>MAG CAÑUELAS</strong><span>${d.date||''}</span><small>Fuente: Grupo Guarino</small></div><div class="mag-resumen"><strong>${Number(d.heads||0).toLocaleString('es-AR')}</strong><span>Entrada · cabezas</span></div><div class="mag-resumen"><strong>${d.trucks??'—'}</strong><span>Camiones</span></div>`;
+ for(const k of Object.keys(C))if(d.prices?.[k])html+=dato(k,d);
+ html+=indices(d);
+ document.getElementById('mag-track').innerHTML=html+html;
+}
+load().catch(e=>document.getElementById('mag-canuelas').innerHTML='<div style="padding:20px;font-family:Arial">No se pudieron cargar los datos MAG.</div>');
+</script>
+</body>
+</html>
