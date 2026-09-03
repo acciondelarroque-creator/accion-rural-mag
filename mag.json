@@ -1,8 +1,10 @@
 {
-  "updated": "2026-09-03T01:07:40.833696+00:00",
+  "updated": "2026-09-03T01:21:31.177819+00:00",
   "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
   "url": "https://www.grupoguarino.com.ar/precios-mag/",
+  "index_url": "https://www.grupoguarino.com.ar/",
   "date": "02/09/2026",
+  "index_date": "02/09/2026",
   "comparison_date": "01/09/2026",
   "heads": 5907,
   "trucks": 170,
@@ -243,12 +245,28 @@
   "indices": {
     "inmag_novillo": 4116.1,
     "igmag_general": 3635.53,
-    "arrendamiento": 3635.53
+    "arrendamiento": 4203.46
   },
   "indices_changes": {
-    "inmag_novillo": -7.2,
-    "igmag_general": -3.8,
-    "arrendamiento": -3.8
+    "inmag_novillo": -3.5,
+    "igmag_general": -6.5,
+    "arrendamiento": -2.7
   },
-  "indices_monthly": {}
+  "indices_monthly": {
+    "inmag_novillo": {
+      "mes": "Agosto 2026",
+      "promedio": 4304.619,
+      "variacion": -0.3
+    },
+    "igmag_general": {
+      "mes": "Agosto 2026",
+      "promedio": 3834.474,
+      "variacion": 3.1
+    },
+    "arrendamiento": {
+      "mes": "Agosto 2026",
+      "promedio": 4373.766,
+      "variacion": 0.5
+    }
+  }
 }
