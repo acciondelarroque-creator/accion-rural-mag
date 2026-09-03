@@ -1,8 +1,11 @@
 name: Probar actualización MAG
 
 on:
+  push:
+    paths:
+      - "update_mag.py"
   schedule:
-    # Prueba automática cada 30 minutos, lunes a viernes.
+    # Actualización automática cada 30 minutos, lunes a viernes.
     - cron: "*/30 * * * 1-5"
   workflow_dispatch:
 
@@ -30,10 +33,10 @@ jobs:
       - name: Instalar dependencias
         run: pip install requests beautifulsoup4
 
-      - name: Obtener precios MAG
+      - name: Obtener precios e índices MAG
         run: python update_mag.py
 
-      - name: Guardar resultado de prueba
+      - name: Guardar resultado
         run: |
           git config user.name "Acción Rural MAG Bot"
           git config user.email "actions@users.noreply.github.com"
@@ -42,6 +45,6 @@ jobs:
             echo "Sin cambios en MAG."
             exit 0
           fi
-          git commit -m "Actualizar prueba MAG"
+          git commit -m "Actualizar datos MAG"
           git pull --rebase origin main
           git push origin HEAD:main
