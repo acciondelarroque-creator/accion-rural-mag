@@ -77,10 +77,15 @@ def parsear_tabla(soup):
 
 
 def bloque_indice(texto, inicio, siguientes):
-    fin = "|".join(re.escape(x) for x in siguientes)
-    patron = rf"{re.escape(inicio)}(.*?)(?={fin}|$)"
-    m = re.search(patron, texto, re.I)
-    return m.group(1) if m else ""
+    pos = texto.lower().find(inicio.lower())
+    if pos < 0:
+        return ""
+    resto = texto[pos + len(inicio):]
+    if not siguientes:
+        return resto
+    posiciones = [resto.lower().find(x.lower()) for x in siguientes]
+    posiciones = [p for p in posiciones if p >= 0]
+    return resto[:min(posiciones)] if posiciones else resto
 
 
 def extraer_indice(bloque):
