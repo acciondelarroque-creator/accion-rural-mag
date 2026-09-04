@@ -56,17 +56,17 @@
 #mag-canuelas .mag-resumen span{font-size:10px;line-height:13px}
 /* DATOS */
 #mag-canuelas .mag-dato{
-    width:330px;height:92px;flex-shrink:0;
+    width:285px;height:92px;flex-shrink:0;
     border-right:1px solid rgba(255,255,255,.25);
     display:flex;flex-direction:column;justify-content:center;align-items:center;
-    padding:2px 8px;box-sizing:border-box;
+    padding:2px 6px;box-sizing:border-box;
 }
 #mag-canuelas .mag-titulo{
-    display:flex;justify-content:center;align-items:baseline;gap:7px;width:100%;
+    display:flex;justify-content:center;align-items:baseline;gap:6px;width:100%;
     margin-top:-5px;margin-bottom:5px;white-space:nowrap;
 }
-#mag-canuelas .mag-categoria{font-size:15px;line-height:18px;font-weight:bold}
-#mag-canuelas .mag-rango{font-size:17px;line-height:19px;font-weight:bold}
+#mag-canuelas .mag-categoria{font-size:14px;line-height:17px;font-weight:bold}
+#mag-canuelas .mag-rango{font-size:16px;line-height:18px;font-weight:bold}
 /* ETIQUETAS */
 #mag-canuelas .mag-etiquetas{
     width:100%;display:grid;grid-template-columns:31% 31% 38%;
@@ -88,14 +88,13 @@
 #mag-canuelas .sin-dato{color:#aab8c0}
 /* ÍNDICES */
 #mag-canuelas .mag-indices{
-    width:760px;height:92px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.25);
+    width:650px;height:92px;flex-shrink:0;border-right:1px solid rgba(255,255,255,.25);
     display:flex;flex-direction:column;justify-content:center;box-sizing:border-box;padding:4px 10px;
 }
-#mag-canuelas .mag-indices-titulo{text-align:center;font-family:Arial,sans-serif;font-size:10px;line-height:11px;font-weight:bold;margin-bottom:3px}
 #mag-canuelas .mag-indices-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;width:100%}
 #mag-canuelas .mag-indice{text-align:center;min-width:0}
-#mag-canuelas .mag-indice-nombre{display:block;font-family:Arial,sans-serif;font-size:9px;line-height:10px;font-weight:bold;white-space:nowrap}
-#mag-canuelas .mag-indice-valor{font-size:15px;line-height:17px;font-weight:bold;white-space:nowrap}
+#mag-canuelas .mag-indice-nombre{display:block;font-family:Arial,sans-serif;font-size:10px;line-height:11px;font-weight:bold;white-space:nowrap}
+#mag-canuelas .mag-indice-valor{display:block;font-size:15px;line-height:17px;font-weight:bold;white-space:nowrap}
 #mag-canuelas .mag-indice-var{font-family:Arial,sans-serif;font-size:9px;line-height:10px;font-weight:bold}
 #mag-canuelas .mag-indice-prom{display:block;font-family:Arial,sans-serif;font-size:8px;line-height:9px;white-space:nowrap}
 /* ANIMACIÓN */
@@ -111,17 +110,16 @@
     #mag-canuelas .mag-resumen{width:82px;height:78px}
     #mag-canuelas .mag-resumen strong{font-size:15px}
     #mag-canuelas .mag-resumen span{font-size:8px}
-    #mag-canuelas .mag-dato{width:300px;height:78px;padding:2px 5px}
+    #mag-canuelas .mag-dato{width:265px;height:78px;padding:2px 5px}
     #mag-canuelas .mag-titulo{gap:5px;margin-top:-4px;margin-bottom:4px}
-    #mag-canuelas .mag-categoria{font-size:12px;line-height:15px}
-    #mag-canuelas .mag-rango{font-size:15px;line-height:16px}
+    #mag-canuelas .mag-categoria{font-size:11px;line-height:14px}
+    #mag-canuelas .mag-rango{font-size:14px;line-height:15px}
     #mag-canuelas .mag-etiquetas span{font-size:8px;line-height:9px}
     #mag-canuelas .mag-precio strong{font-size:11px;line-height:13px}
     #mag-canuelas .mag-precio.max strong{font-size:12px}
     #mag-canuelas .mag-var{font-size:8px;line-height:9px;min-height:9px}
-    #mag-canuelas .mag-indices{width:760px;height:78px;padding:3px 6px}
-    #mag-canuelas .mag-indices-titulo{font-size:8px;line-height:9px}
-    #mag-canuelas .mag-indice-nombre{font-size:7px;line-height:8px}
+    #mag-canuelas .mag-indices{width:650px;height:78px;padding:3px 6px}
+    #mag-canuelas .mag-indice-nombre{font-size:8px;line-height:9px}
     #mag-canuelas .mag-indice-valor{font-size:12px;line-height:14px}
     #mag-canuelas .mag-indice-var{font-size:7px;line-height:8px}
     #mag-canuelas .mag-indice-prom{font-size:6px;line-height:7px}
@@ -132,10 +130,10 @@
 <div id="mag-canuelas"><div class="mag-track" id="mag-track"></div></div>
 <script>
 const C={
- novillos_431_460:['NOVILLOS','431/460 Kg.'],novillos_461_490:['NOVILLOS','461/490 Kg.'],novillos_491_520:['NOVILLOS','491/520 Kg.'],novillos_mas_520:['NOVILLOS','+520 Kg.'],novillos_regulares:['NOVILLOS','Regulares'],
- novillitos_300_350:['NOVILLITOS','300/350 Kg.'],novillitos_351_390:['NOVILLITOS','351/390 Kg.'],novillitos_391_430:['NOVILLITOS','391/430 Kg.'],novillitos_regulares:['NOVILLITOS','Regulares'],
- vaquillonas_300_350:['VAQUILLONAS','300/350 Kg.'],vaquillonas_351_390:['VAQUILLONAS','351/390 Kg.'],vaquillonas_391_430:['VAQUILLONAS','391/430 Kg.'],vaquillonas_regulares:['VAQUILLONAS','Regulares'],
- vacas_buenas_especiales:['VACAS','Buenas a especiales'],vacas_regulares:['VACAS','Regulares'],conserva_buena:['CONSERVA','Buena'],conserva_inferior:['CONSERVA','Inferior'],toros_buenos_especiales:['TOROS','Buenos a especiales'],toros_regulares:['TOROS','Regulares']
+ novillos_431_460:['NOV.','431/460 Kg.'],novillos_461_490:['NOV.','461/490 Kg.'],novillos_491_520:['NOV.','491/520 Kg.'],novillos_mas_520:['NOV.','+520 Kg.'],novillos_regulares:['NOV.','REG.'],
+ novillitos_300_350:['NOVILL.','300/350 Kg.'],novillitos_351_390:['NOVILL.','351/390 Kg.'],novillitos_391_430:['NOVILL.','391/430 Kg.'],novillitos_regulares:['NOVILL.','REG.'],
+ vaquillonas_300_350:['VAQ.','300/350 Kg.'],vaquillonas_351_390:['VAQ.','351/390 Kg.'],vaquillonas_391_430:['VAQ.','391/430 Kg.'],vaquillonas_regulares:['VAQ.','REG.'],
+ vacas_buenas_especiales:['VAC.','B. A ESP.'],vacas_regulares:['VAC.','REG.'],conserva_buena:['CONS.','BUENA'],conserva_inferior:['CONS.','INFERIOR'],toros_buenos_especiales:['TOR.','B. A ESP.'],toros_regulares:['TOR.','REG.']
 };
 const money=n=>n==null?'—':'$'+Number(n).toLocaleString('es-AR');
 const pct=n=>n==null?'—':((n>0?'▲ ':'')+(n<0?'▼ ':'')+Math.abs(n).toLocaleString('es-AR',{minimumFractionDigits:2,maximumFractionDigits:2})+'%');
@@ -146,7 +144,7 @@ function dato(k,d){
 }
 function indices(d){
  const x=d.indices||{},c=d.indices_changes||{},p=d.indices_monthly||{};
- return `<div class="mag-indices"><div class="mag-indices-titulo">ÍNDICES MERCADO AGROGANADERO DE CAÑUELAS (MAG) · ÚLTIMO ÍNDICE OPERADO ${d.index_date||'28/08/2026'}</div><div class="mag-indices-grid"><div class="mag-indice"><span class="mag-indice-nombre">INMAG · NOVILLO</span><span class="mag-indice-valor">${Number(x.inmag_novillo||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.inmag_novillo)}">${pct(c.inmag_novillo)}</span><span class="mag-indice-prom">${p.inmag_novillo?`Prom. mensual: ${Number(p.inmag_novillo.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.inmag_novillo.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-nombre">IGMAG · GENERAL</span><span class="mag-indice-valor">${Number(x.igmag_general||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.igmag_general)}">${pct(c.igmag_general)}</span><span class="mag-indice-prom">${p.igmag_general?`Prom. mensual: ${Number(p.igmag_general.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.igmag_general.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-nombre">ÍNDICE SUGERIDO ARRENDAMIENTOS RURALES</span><span class="mag-indice-valor">${Number(x.arrendamiento||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-var ${cls(c.arrendamiento)}">${pct(c.arrendamiento)}</span><span class="mag-indice-prom">${p.arrendamiento?`Prom. mensual: ${Number(p.arrendamiento.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.arrendamiento.variacion)}`:''}</span></div></div></div>`;
+ return `<div class="mag-indices"><div class="mag-indices-grid"><div class="mag-indice"><span class="mag-indice-valor">${Number(x.inmag_novillo||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-nombre">IND. NOV.</span><span class="mag-indice-var ${cls(c.inmag_novillo)}">${pct(c.inmag_novillo)}</span><span class="mag-indice-prom">${p.inmag_novillo?`Prom. mensual: ${Number(p.inmag_novillo.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.inmag_novillo.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-valor">${Number(x.igmag_general||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-nombre">IND. GRAL.</span><span class="mag-indice-var ${cls(c.igmag_general)}">${pct(c.igmag_general)}</span><span class="mag-indice-prom">${p.igmag_general?`Prom. mensual: ${Number(p.igmag_general.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.igmag_general.variacion)}`:''}</span></div><div class="mag-indice"><span class="mag-indice-valor">${Number(x.arrendamiento||0).toLocaleString('es-AR',{minimumFractionDigits:3})}</span><span class="mag-indice-nombre">IND. ARREND.</span><span class="mag-indice-var ${cls(c.arrendamiento)}">${pct(c.arrendamiento)}</span><span class="mag-indice-prom">${p.arrendamiento?`Prom. mensual: ${Number(p.arrendamiento.promedio).toLocaleString('es-AR',{minimumFractionDigits:3})} · ${pct(p.arrendamiento.variacion)}`:''}</span></div></div></div>`;
 }
 async function load(){
  const d=await fetch('mag.json?'+Date.now()).then(r=>r.json());
