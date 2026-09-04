@@ -6,12 +6,12 @@ import requests
 from bs4 import BeautifulSoup
 
 # Guarino publica los datos en páginas distintas.
-# v8: precios desde /precios-mag/ e índices desde la portada.
+# v9: precios desde /precios-mag/ e índices desde la portada.
 PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 INDEX_URL = "https://www.grupoguarino.com.ar/"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
-SOURCE_ID = "guarino-completo-v8"
+SOURCE_ID = "guarino-completo-v9"
 
 CATEGORIAS = {
     "novillos_431_460": "Novillos 431/460", "novillos_461_490": "Novillos 461/490", "novillos_491_520": "Novillos 491/520", "novillos_mas_520": "Novillos +520", "novillos_regulares": "Novillos regulares",
@@ -35,15 +35,54 @@ def numero_argentino(token):
 
 
 def obtener_pagina(url):
-    r = requests.get(url, headers={"User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/2.0)"}, timeout=30)
-    r.raise_for_status()
-    return r.text
+    headers = {
+        "User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/2.0)",
+        "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    }
+    ultimo_error = None
+    for intento in range(3):
+        try:
+            r = requests.get(url, headers=headers, timeout=30)
+            r.raise_for_status()
+            if r.text and len(r.text) > 500:
+                return r.text
+        except requests.RequestException as exc:
+            ultimo_error = exc
+    if ultimo_error:
+        raise ultimo_error
+    raise RuntimeError(f"La página {url} devolvió una respuesta vacía o incompleta")
 
 
 def fecha_es(texto):
-    meses = {"enero":"01","febrero":"02","marzo":"03","abril":"04","mayo":"05","junio":"06","julio":"07","agosto":"08","septiembre":"09","setiembre":"09","octubre":"10","noviembre":"11","diciembre":"12"}
-    m = re.search(r"(\d{1,2})\s+de\s+([a-záéíóú]+)\s+de\s+(\d{4})", texto, re.I)
-    return f"{int(m.group(1)):02d}/{meses[m.group(2).lower()]}/{m.group(3)}" if m else None
+    """Detecta la fecha de la rueda en los formatos que puede entregar Guarino."""
+    if not texto:
+        return None
+    texto = re.sub(r"\s+", " ", str(texto)).strip()
+    meses = {
+        "enero": "01", "febrero": "02", "marzo": "03", "abril": "04",
+        "mayo": "05", "junio": "06", "julio": "07", "agosto": "08",
+        "septiembre": "09", "setiembre": "09", "octubre": "10",
+        "noviembre": "11", "diciembre": "12",
+    }
+
+    # Formato principal: 2 de septiembre de 2026
+    m = re.search(r"\b(\d{1,2})\s+de\s+([a-záéíóú]+)\s+(?:de\s+)?(\d{4})\b", texto, re.I)
+    if m and m.group(2).lower() in meses:
+        return f"{int(m.group(1)):02d}/{meses[m.group(2).lower()]}/{m.group(3)}"
+
+    # Variantes numéricas por si cambia el formato de la página.
+    for patron in (
+        r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b",
+        r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b",
+    ):
+        m = re.search(patron, texto)
+        if m:
+            if len(m.group(1)) == 4:
+                return f"{int(m.group(3)):02d}/{int(m.group(2)):02d}/{m.group(1)}"
+            return f"{int(m.group(1)):02d}/{int(m.group(2)):02d}/{m.group(3)}"
+
+    return None
 
 
 def variacion(actual, anterior):
@@ -132,11 +171,13 @@ def cargar_estado():
 
 
 def main():
-    # PRECIOS: /precios-mag/
     prices_html = obtener_pagina(PRICES_URL)
     prices_soup = BeautifulSoup(prices_html, "html.parser")
     prices_text = prices_soup.get_text(" ", strip=True)
     fecha = fecha_es(prices_text)
+    if not fecha:
+        # Segundo intento sobre el HTML completo: cubre fechas separadas por etiquetas HTML.
+        fecha = fecha_es(prices_html)
     if not fecha:
         raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
 
@@ -148,7 +189,6 @@ def main():
     m = re.search(r"([\d.]+)\s+Cabezas semana", prices_text, re.I)
     week_heads = int(m.group(1).replace(".", "")) if m else None
 
-    # ÍNDICES: página principal de Guarino.
     index_html = obtener_pagina(INDEX_URL)
     index_soup = BeautifulSoup(index_html, "html.parser")
     index_text = index_soup.get_text(" ", strip=True)
@@ -156,8 +196,6 @@ def main():
 
     estado = cargar_estado()
 
-    # La comparación de precios es contra la rueda anterior, nunca contra una
-    # actualización intradiaria de 30 minutos.
     if "baseline_date" in estado and "baseline_prices" in estado:
         if fecha != estado.get("last_date"):
             baseline_date = estado.get("last_date")
