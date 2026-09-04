@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 
 # Guarino publica los datos en páginas distintas.
-# v9: precios desde /precios-mag/ e índices desde la portada.
+# v10: fecha robusta + sincronización previa del repositorio en Actions.
 PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 INDEX_URL = "https://www.grupoguarino.com.ar/"
 STATE_FILE = "mag_previous.json"
