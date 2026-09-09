@@ -7,12 +7,13 @@ import requests
 from bs4 import BeautifulSoup
 
 # Guarino publica los datos en páginas distintas.
-# v11: espera y reintenta la portada si los índices todavía no fueron actualizados.
+# v12: los índices se toman exclusivamente de la portada oficial de Guarino,
+# con cache-busting y validación de fecha antes de publicar.
 PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 INDEX_URL = "https://www.grupoguarino.com.ar/"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
-SOURCE_ID = "guarino-completo-v11"
+SOURCE_ID = "guarino-completo-v12"
 
 CATEGORIAS = {
     "novillos_431_460": "Novillos 431/460", "novillos_461_490": "Novillos 461/490", "novillos_491_520": "Novillos 491/520", "novillos_mas_520": "Novillos +520", "novillos_regulares": "Novillos regulares",
@@ -40,6 +41,8 @@ def obtener_pagina(url):
         "User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/2.0)",
         "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Cache-Control": "no-cache, no-store, max-age=0",
+        "Pragma": "no-cache",
     }
     ultimo_error = None
     for intento in range(3):
@@ -162,10 +165,14 @@ def indices_desde_homepage(texto):
 
 
 def obtener_indices_actualizados(fecha_precios):
-    """Obtiene los índices de la portada y no acepta una fecha anterior a la rueda."""
+    """Obtiene SOLO los índices desde la portada oficial de Guarino.
+    El cache-busting evita reutilizar una versión anterior de la portada.
+    No publica datos si la fecha del índice no coincide con la rueda.
+    """
     ultimo = None
     for intento in range(10):
-        index_html = obtener_pagina(INDEX_URL)
+        cache_url = f"{INDEX_URL}?accionrural_cache={int(time.time())}"
+        index_html = obtener_pagina(cache_url)
         index_soup = BeautifulSoup(index_html, "html.parser")
         index_text = index_soup.get_text(" ", strip=True)
         idx, idx_changes, idx_monthly, index_date = indices_desde_homepage(index_text)
