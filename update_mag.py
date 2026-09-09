@@ -1,19 +1,18 @@
 import json
 import re
-import time
 from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 import requests
 from bs4 import BeautifulSoup
 
-# Guarino publica los datos en páginas distintas.
-# v12: los índices se toman exclusivamente de la portada oficial de Guarino,
-# con cache-busting y validación de fecha antes de publicar.
-PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
-INDEX_URL = "https://www.grupoguarino.com.ar/"
+# Guarino separa la rueda de precios de los índices.
+# Los precios se leen desde Históricos y los índices desde la pestaña histórica.
+HISTORICAL_PRICES_URL = "https://www.grupoguarino.com.ar/historicos/?rmag_tab=pmag&rmag_fecha={}"
+INDEX_URL = "https://www.grupoguarino.com.ar/historicos/?rmag_tab=indices"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
-SOURCE_ID = "guarino-completo-v12"
+SOURCE_ID = "guarino-historicos-v13"
 
 CATEGORIAS = {
     "novillos_431_460": "Novillos 431/460", "novillos_461_490": "Novillos 461/490", "novillos_491_520": "Novillos 491/520", "novillos_mas_520": "Novillos +520", "novillos_regulares": "Novillos regulares",
@@ -38,28 +37,20 @@ def numero_argentino(token):
 
 def obtener_pagina(url):
     headers = {
-        "User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/2.0)",
+        "User-Agent": "Mozilla/5.0 (compatible; AccionRuralBot/3.0)",
         "Accept-Language": "es-AR,es;q=0.9,en;q=0.8",
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
         "Cache-Control": "no-cache, no-store, max-age=0",
         "Pragma": "no-cache",
     }
-    ultimo_error = None
-    for intento in range(3):
-        try:
-            r = requests.get(url, headers=headers, timeout=30)
-            r.raise_for_status()
-            if r.text and len(r.text) > 500:
-                return r.text
-        except requests.RequestException as exc:
-            ultimo_error = exc
-    if ultimo_error:
-        raise ultimo_error
-    raise RuntimeError(f"La página {url} devolvió una respuesta vacía o incompleta")
+    r = requests.get(url, headers=headers, timeout=30)
+    r.raise_for_status()
+    if not r.text or len(r.text) < 500:
+        raise RuntimeError(f"La página {url} devolvió una respuesta vacía o incompleta")
+    return r.text
 
 
 def fecha_es(texto):
-    """Detecta la fecha de la rueda en los formatos que puede entregar Guarino."""
     if not texto:
         return None
     texto = re.sub(r"\s+", " ", str(texto)).strip()
@@ -69,21 +60,15 @@ def fecha_es(texto):
         "septiembre": "09", "setiembre": "09", "octubre": "10",
         "noviembre": "11", "diciembre": "12",
     }
-
     m = re.search(r"\b(\d{1,2})\s+de\s+([a-záéíóú]+)\s+(?:de\s+)?(\d{4})\b", texto, re.I)
     if m and m.group(2).lower() in meses:
         return f"{int(m.group(1)):02d}/{meses[m.group(2).lower()]}/{m.group(3)}"
-
-    for patron in (
-        r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b",
-        r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b",
-    ):
+    for patron in (r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b", r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b"):
         m = re.search(patron, texto)
         if m:
             if len(m.group(1)) == 4:
                 return f"{int(m.group(3)):02d}/{int(m.group(2)):02d}/{m.group(1)}"
             return f"{int(m.group(1)):02d}/{int(m.group(2)):02d}/{m.group(3)}"
-
     return None
 
 
@@ -122,8 +107,6 @@ def bloque_indice(texto, inicio, siguientes):
     if pos < 0:
         return ""
     resto = texto[pos + len(inicio):]
-    if not siguientes:
-        return resto
     posiciones = [resto.lower().find(x.lower()) for x in siguientes]
     posiciones = [p for p in posiciones if p >= 0]
     return resto[:min(posiciones)] if posiciones else resto
@@ -142,7 +125,7 @@ def extraer_indice(bloque):
     return valor, cambio, fecha, mensual
 
 
-def indices_desde_homepage(texto):
+def indices_desde_pagina(texto):
     etiquetas = ["INMAG - NOVILLO", "IGMAG - GENERAL", "ÍNDICE SUGERIDO ARRENDAMIENTOS RURALES"]
     bloques = {
         "inmag_novillo": bloque_indice(texto, etiquetas[0], etiquetas[1:]),
@@ -154,7 +137,7 @@ def indices_desde_homepage(texto):
     for clave, bloque in bloques.items():
         valor, cambio, fecha, mensual = extraer_indice(bloque)
         if valor is None:
-            raise RuntimeError(f"No se pudo extraer el índice {clave} desde la página principal de Guarino")
+            raise RuntimeError(f"No se pudo extraer el índice {clave} desde Históricos de Guarino")
         idx[clave] = valor
         changes[clave] = cambio
         if fecha and index_date is None:
@@ -162,32 +145,6 @@ def indices_desde_homepage(texto):
         if mensual:
             monthly[clave] = mensual
     return idx, changes, monthly, index_date
-
-
-def obtener_indices_actualizados(fecha_precios):
-    """Obtiene SOLO los índices desde la portada oficial de Guarino.
-    El cache-busting evita reutilizar una versión anterior de la portada.
-    No publica datos si la fecha del índice no coincide con la rueda.
-    """
-    ultimo = None
-    for intento in range(10):
-        cache_url = f"{INDEX_URL}?accionrural_cache={int(time.time())}"
-        index_html = obtener_pagina(cache_url)
-        index_soup = BeautifulSoup(index_html, "html.parser")
-        index_text = index_soup.get_text(" ", strip=True)
-        idx, idx_changes, idx_monthly, index_date = indices_desde_homepage(index_text)
-        ultimo = (idx, idx_changes, idx_monthly, index_date)
-
-        if index_date == fecha_precios:
-            return ultimo
-
-        if intento < 9:
-            print(f"Índices Guarino todavía desactualizados ({index_date}); se reintentará en 60 segundos.")
-            time.sleep(60)
-
-    raise RuntimeError(
-        f"Los índices de Guarino siguen desactualizados: rueda {fecha_precios}, índice {ultimo[3] if ultimo else 'desconocido'}. No se publica mag.json para evitar mezclar fechas."
-    )
 
 
 def cargar_estado():
@@ -198,15 +155,48 @@ def cargar_estado():
         return {}
 
 
+def obtener_indices(fecha_precios, estado):
+    cache_url = INDEX_URL + "&accionrural_cache=" + str(int(datetime.now(timezone.utc).timestamp()))
+    html = obtener_pagina(cache_url)
+    texto = BeautifulSoup(html, "html.parser").get_text(" ", strip=True)
+    idx, changes, monthly, index_date = indices_desde_pagina(texto)
+
+    # Si Guarino ya publicó los índices de la misma rueda, se usan.
+    if index_date == fecha_precios:
+        print(f"Índices actualizados: {index_date}")
+        return idx, changes, monthly, index_date
+
+    # Si todavía no publicó los índices de la rueda nueva, NO bloqueamos los precios.
+    # Conservamos los últimos índices que ya estaban publicados en mag.json.
+    previo = estado.get("indices")
+    previo_changes = estado.get("indices_changes")
+    previo_monthly = estado.get("indices_monthly")
+    previo_date = estado.get("index_date")
+
+    if previo:
+        print(f"Índices todavía en {index_date}; se conservan los últimos índices publicados ({previo_date}).")
+        return previo, previo_changes or {}, previo_monthly or monthly, previo_date
+
+    # Primera ejecución sin estado previo: usamos lo que Guarino tenga disponible.
+    print(f"Sin índices previos; se utilizan los índices disponibles de {index_date}.")
+    return idx, changes, monthly, index_date
+
+
 def main():
-    prices_html = obtener_pagina(PRICES_URL)
+    estado = cargar_estado()
+
+    # Argentina: el workflow corre a las 11:00 local. Consultamos directamente
+    # la fecha histórica correspondiente, evitando depender de /precios-mag/.
+    hoy_ar = datetime.now(ZoneInfo("America/Argentina/Buenos_Aires"))
+    fecha_iso = hoy_ar.strftime("%Y-%m-%d")
+    prices_url = HISTORICAL_PRICES_URL.format(fecha_iso)
+    prices_html = obtener_pagina(prices_url)
     prices_soup = BeautifulSoup(prices_html, "html.parser")
     prices_text = prices_soup.get_text(" ", strip=True)
-    fecha = fecha_es(prices_text)
+
+    fecha = fecha_es(prices_text) or fecha_es(prices_html)
     if not fecha:
-        fecha = fecha_es(prices_html)
-    if not fecha:
-        raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
+        raise RuntimeError(f"No se pudo determinar la fecha de la rueda MAG desde {prices_url}")
 
     filas = parsear_tabla(prices_soup)
     m = re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas", prices_text, re.I)
@@ -216,9 +206,7 @@ def main():
     m = re.search(r"([\d.]+)\s+Cabezas semana", prices_text, re.I)
     week_heads = int(m.group(1).replace(".", "")) if m else None
 
-    idx, idx_changes, idx_monthly, index_date = obtener_indices_actualizados(fecha)
-
-    estado = cargar_estado()
+    idx, idx_changes, idx_monthly, index_date = obtener_indices(fecha, estado)
 
     if "baseline_date" in estado and "baseline_prices" in estado:
         if fecha != estado.get("last_date"):
@@ -242,7 +230,7 @@ def main():
     datos = {
         "updated": datetime.now(timezone.utc).isoformat(),
         "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
-        "url": PRICES_URL,
+        "url": prices_url,
         "index_url": INDEX_URL,
         "date": fecha,
         "index_date": index_date,
@@ -262,9 +250,10 @@ def main():
         json.dump(datos, f, ensure_ascii=False, indent=2)
 
     if fecha != estado.get("last_date"):
-        nuevo = {"source_id": SOURCE_ID, "baseline_date": baseline_date, "baseline_prices": baseline_prices, "last_date": fecha, "last_prices": filas}
+        nuevo = {"source_id": SOURCE_ID, "baseline_date": baseline_date, "baseline_prices": baseline_prices, "last_date": fecha, "last_prices": filas, "indices": idx, "indices_changes": idx_changes, "indices_monthly": idx_monthly, "index_date": index_date}
     else:
-        nuevo = {"source_id": SOURCE_ID, "baseline_date": estado.get("baseline_date", baseline_date), "baseline_prices": estado.get("baseline_prices", baseline_prices), "last_date": fecha, "last_prices": filas}
+        nuevo = {"source_id": SOURCE_ID, "baseline_date": estado.get("baseline_date", baseline_date), "baseline_prices": estado.get("baseline_prices", baseline_prices), "last_date": fecha, "last_prices": filas, "indices": idx, "indices_changes": idx_changes, "indices_monthly": idx_monthly, "index_date": index_date}
+
     with open(STATE_FILE, "w", encoding="utf-8") as f:
         json.dump(nuevo, f, ensure_ascii=False, indent=2)
 
