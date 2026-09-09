@@ -1,17 +1,18 @@
 import json
 import re
+import time
 from datetime import datetime, timezone
 
 import requests
 from bs4 import BeautifulSoup
 
 # Guarino publica los datos en páginas distintas.
-# v10: fecha robusta + sincronización previa del repositorio en Actions.
+# v11: espera y reintenta la portada si los índices todavía no fueron actualizados.
 PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 INDEX_URL = "https://www.grupoguarino.com.ar/"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
-SOURCE_ID = "guarino-completo-v9"
+SOURCE_ID = "guarino-completo-v11"
 
 CATEGORIAS = {
     "novillos_431_460": "Novillos 431/460", "novillos_461_490": "Novillos 461/490", "novillos_491_520": "Novillos 491/520", "novillos_mas_520": "Novillos +520", "novillos_regulares": "Novillos regulares",
@@ -66,12 +67,10 @@ def fecha_es(texto):
         "noviembre": "11", "diciembre": "12",
     }
 
-    # Formato principal: 2 de septiembre de 2026
     m = re.search(r"\b(\d{1,2})\s+de\s+([a-záéíóú]+)\s+(?:de\s+)?(\d{4})\b", texto, re.I)
     if m and m.group(2).lower() in meses:
         return f"{int(m.group(1)):02d}/{meses[m.group(2).lower()]}/{m.group(3)}"
 
-    # Variantes numéricas por si cambia el formato de la página.
     for patron in (
         r"\b(\d{1,2})[/-](\d{1,2})[/-](\d{4})\b",
         r"\b(\d{4})-(\d{1,2})-(\d{1,2})\b",
@@ -162,6 +161,28 @@ def indices_desde_homepage(texto):
     return idx, changes, monthly, index_date
 
 
+def obtener_indices_actualizados(fecha_precios):
+    """Obtiene los índices de la portada y no acepta una fecha anterior a la rueda."""
+    ultimo = None
+    for intento in range(10):
+        index_html = obtener_pagina(INDEX_URL)
+        index_soup = BeautifulSoup(index_html, "html.parser")
+        index_text = index_soup.get_text(" ", strip=True)
+        idx, idx_changes, idx_monthly, index_date = indices_desde_homepage(index_text)
+        ultimo = (idx, idx_changes, idx_monthly, index_date)
+
+        if index_date == fecha_precios:
+            return ultimo
+
+        if intento < 9:
+            print(f"Índices Guarino todavía desactualizados ({index_date}); se reintentará en 60 segundos.")
+            time.sleep(60)
+
+    raise RuntimeError(
+        f"Los índices de Guarino siguen desactualizados: rueda {fecha_precios}, índice {ultimo[3] if ultimo else 'desconocido'}. No se publica mag.json para evitar mezclar fechas."
+    )
+
+
 def cargar_estado():
     try:
         with open(STATE_FILE, "r", encoding="utf-8") as f:
@@ -176,7 +197,6 @@ def main():
     prices_text = prices_soup.get_text(" ", strip=True)
     fecha = fecha_es(prices_text)
     if not fecha:
-        # Segundo intento sobre el HTML completo: cubre fechas separadas por etiquetas HTML.
         fecha = fecha_es(prices_html)
     if not fecha:
         raise RuntimeError("No se pudo determinar la fecha de la rueda MAG")
@@ -189,10 +209,7 @@ def main():
     m = re.search(r"([\d.]+)\s+Cabezas semana", prices_text, re.I)
     week_heads = int(m.group(1).replace(".", "")) if m else None
 
-    index_html = obtener_pagina(INDEX_URL)
-    index_soup = BeautifulSoup(index_html, "html.parser")
-    index_text = index_soup.get_text(" ", strip=True)
-    idx, idx_changes, idx_monthly, index_date = indices_desde_homepage(index_text)
+    idx, idx_changes, idx_monthly, index_date = obtener_indices_actualizados(fecha)
 
     estado = cargar_estado()
 
