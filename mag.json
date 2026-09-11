@@ -1,11 +1,11 @@
 {
-  "updated": "2026-09-11T17:00:00-03:00",
-  "source": "Mercado Agroganadero de Cañuelas (MAG) + Guarino Producciones",
-  "url": "https://www.mercadoagroganadero.com.ar/dll/hacienda1.dll/haciinfo000002",
+  "updated": "2026-09-11T15:10:00-03:00",
+  "source": "Guarino Producciones",
+  "url": "https://www.grupoguarino.com.ar/historicos/",
   "index_url": "https://www.grupoguarino.com.ar/",
   "date": "11/09/2026",
   "index_date": "11/09/2026",
-  "comparison_date": "11/09/2026",
+  "comparison_date": "09/09/2026",
   "heads": 5705,
   "trucks": null,
   "week_heads": 13779,
@@ -243,8 +243,8 @@
     }
   },
   "indices": {
-    "inmag_novillo": 4332.077,
-    "igmag_general": 3756.486,
+    "inmag_novillo": 4332.08,
+    "igmag_general": 3756.49,
     "arrendamiento": 4315.6
   },
   "indices_changes": {
