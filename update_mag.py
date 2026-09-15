@@ -1,6 +1,6 @@
 import json
 import re
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 from zoneinfo import ZoneInfo
 
 import requests
@@ -199,14 +199,12 @@ def main():
     fecha = None
     ultima_error = None
 
+    candidato = hoy_ar
     for retroceso in range(0, 6):
-        candidato = hoy_ar
-        dias = retroceso
-        while dias:
-            candidato = candidato.replace(day=candidato.day - 1)
-            dias -= 1
+        if retroceso > 0:
+            candidato = candidato - timedelta(days=1)
             while candidato.weekday() >= 5:
-                candidato = candidato.replace(day=candidato.day - 1)
+                candidato = candidato - timedelta(days=1)
         fecha_iso = candidato.strftime("%Y-%m-%d")
         url_candidata = HISTORICAL_PRICES_URL.format(fecha_iso)
 
