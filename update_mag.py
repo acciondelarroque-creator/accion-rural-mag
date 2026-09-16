@@ -184,6 +184,11 @@ def obtener_indices(fecha_precios, estado):
 
 def main():
     estado = cargar_estado()
+    try:
+        with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+            salida_anterior = json.load(f)
+    except (OSError, json.JSONDecodeError):
+        salida_anterior = {}
 
     # Argentina: el workflow corre a las 11:00 local.
     # Guarino puede publicar con demora la rueda del día, por eso buscamos
@@ -215,6 +220,9 @@ def main():
             fecha_candidata = fecha_es(texto_candidato) or fecha_es(html_candidata)
             if not fecha_candidata:
                 raise RuntimeError("sin fecha")
+            fecha_esperada = candidato.strftime("%d/%m/%Y")
+            if fecha_candidata != fecha_esperada:
+                raise RuntimeError(f"la página solicitada {fecha_esperada} devolvió la rueda {fecha_candidata}")
             filas_candidatas = parsear_tabla(soup_candidata)
             prices_html = html_candidata
             prices_soup = soup_candidata
@@ -239,7 +247,14 @@ def main():
 
     idx, idx_changes, idx_monthly, index_date = obtener_indices(fecha, estado)
 
-    if "baseline_date" in estado and "baseline_prices" in estado:
+    # La comparación se toma siempre de la última rueda publicada que figura en mag.json.
+    # El archivo de estado se conserva para evitar que una ejecución fallida retroceda la referencia.
+    referencia_date = salida_anterior.get("date")
+    referencia_prices = salida_anterior.get("prices", {})
+    if referencia_date and referencia_prices:
+        baseline_date = referencia_date
+        baseline_prices = referencia_prices
+    elif "baseline_date" in estado and "baseline_prices" in estado:
         if fecha != estado.get("last_date"):
             baseline_date = estado.get("last_date")
             baseline_prices = estado.get("last_prices", estado.get("baseline_prices", {}))
