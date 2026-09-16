@@ -1,13 +1,13 @@
 {
-  "updated": "2026-09-16T11:00:00-03:00",
+  "updated": "2026-09-16T11:12:00-03:00",
   "source": "Guarino Producciones",
-  "url": "https://www.grupoguarino.com.ar/historicos/?rmag_tab=pmag&rmag_fecha=2026-09-15",
+  "url": "https://www.grupoguarino.com.ar/historicos/",
   "index_url": "https://www.grupoguarino.com.ar/",
-  "date": "15/09/2026",
+  "date": "16/09/2026",
   "index_date": "15/09/2026",
-  "comparison_date": "11/09/2026",
-  "heads": 6522,
-  "trucks": 176,
+  "comparison_date": "15/09/2026",
+  "heads": 5612,
+  "trucks": 169,
   "week_heads": 13779,
   "label": "Mín. Corriente / Máx. Corriente / Máximos",
   "categories": {
@@ -32,31 +32,241 @@
     "toros_regulares": "Toros regulares"
   },
   "prices": {
-    "novillos_431_460": {"min_corriente":4300,"max_corriente":4600,"maximo":4650,"kilos":436,"changes":{"min_corriente":-2.27,"max_corriente":0,"maximo":-3.13}},
-    "novillos_461_490": {"min_corriente":4300,"max_corriente":4500,"maximo":4600,"kilos":480,"changes":{"min_corriente":0,"max_corriente":-2.17,"maximo":0}},
-    "novillos_491_520": {"min_corriente":4200,"max_corriente":4400,"maximo":4500,"kilos":512,"changes":{"min_corriente":null,"max_corriente":null,"maximo":0}},
-    "novillos_mas_520": {"min_corriente":null,"max_corriente":null,"maximo":4550,"kilos":528,"changes":{"min_corriente":null,"max_corriente":null,"maximo":0}},
-    "novillos_regulares": {"min_corriente":3800,"max_corriente":4200,"maximo":null,"kilos":null,"changes":{"min_corriente":0,"max_corriente":-2.33,"maximo":null}},
-    "novillitos_300_350": {"min_corriente":null,"max_corriente":null,"maximo":5300,"kilos":345,"changes":{"min_corriente":null,"max_corriente":null,"maximo":3.92}},
-    "novillitos_351_390": {"min_corriente":4700,"max_corriente":5000,"maximo":5250,"kilos":358,"changes":{"min_corriente":0,"max_corriente":0,"maximo":4.58}},
-    "novillitos_391_430": {"min_corriente":4500,"max_corriente":4800,"maximo":4800,"kilos":393,"changes":{"min_corriente":0,"max_corriente":2.13,"maximo":-1.03}},
-    "novillitos_regulares": {"min_corriente":4200,"max_corriente":4500,"maximo":null,"kilos":null,"changes":{"min_corriente":0,"max_corriente":0,"maximo":null}},
-    "vaquillonas_300_350": {"min_corriente":4700,"max_corriente":5000,"maximo":5250,"kilos":319,"changes":{"min_corriente":0,"max_corriente":0,"maximo":5}},
-    "vaquillonas_351_390": {"min_corriente":4300,"max_corriente":4600,"maximo":4600,"kilos":357,"changes":{"min_corriente":0,"max_corriente":0,"maximo":0}},
-    "vaquillonas_391_430": {"min_corriente":null,"max_corriente":null,"maximo":4360,"kilos":407,"changes":{"min_corriente":null,"max_corriente":null,"maximo":-0.23}},
-    "vaquillonas_regulares": {"min_corriente":3900,"max_corriente":4100,"maximo":null,"kilos":null,"changes":{"min_corriente":0,"max_corriente":0,"maximo":null}},
-    "vacas_buenas_especiales": {"min_corriente":3300,"max_corriente":3600,"maximo":4100,"kilos":435,"changes":{"min_corriente":0,"max_corriente":0,"maximo":2.5}},
-    "vacas_regulares": {"min_corriente":3100,"max_corriente":3300,"maximo":null,"kilos":null,"changes":{"min_corriente":0,"max_corriente":0,"maximo":null}},
-    "conserva_buena": {"min_corriente":null,"max_corriente":2900,"maximo":3000,"kilos":null,"changes":{"min_corriente":null,"max_corriente":0,"maximo":0}},
-    "conserva_inferior": {"min_corriente":2600,"max_corriente":null,"maximo":null,"kilos":null,"changes":{"min_corriente":0,"max_corriente":null,"maximo":null}},
-    "toros_buenos_especiales": {"min_corriente":null,"max_corriente":3600,"maximo":3700,"kilos":656,"changes":{"min_corriente":null,"max_corriente":-5.26,"maximo":-7.5}},
-    "toros_regulares": {"min_corriente":2800,"max_corriente":null,"maximo":null,"kilos":null,"changes":{"min_corriente":3.7,"max_corriente":null,"maximo":null}}
+    "novillos_431_460": {
+      "min_corriente": 4300,
+      "max_corriente": 4500,
+      "maximo": 4500,
+      "kilos": 446,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": -2.17,
+        "maximo": -3.23
+      }
+    },
+    "novillos_461_490": {
+      "min_corriente": 4100,
+      "max_corriente": 4400,
+      "maximo": 4500,
+      "kilos": 476,
+      "changes": {
+        "min_corriente": -4.65,
+        "max_corriente": -2.22,
+        "maximo": -2.17
+      }
+    },
+    "novillos_491_520": {
+      "min_corriente": null,
+      "max_corriente": null,
+      "maximo": 4400,
+      "kilos": 504,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": null,
+        "maximo": -2.22
+      }
+    },
+    "novillos_mas_520": {
+      "min_corriente": 4000,
+      "max_corriente": 4400,
+      "maximo": 4500,
+      "kilos": 558,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": null,
+        "maximo": -1.1
+      }
+    },
+    "novillos_regulares": {
+      "min_corriente": 3800,
+      "max_corriente": 4200,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": 0,
+        "maximo": null
+      }
+    },
+    "novillitos_300_350": {
+      "min_corriente": null,
+      "max_corriente": null,
+      "maximo": 5050,
+      "kilos": 330,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": null,
+        "maximo": -4.72
+      }
+    },
+    "novillitos_351_390": {
+      "min_corriente": 4700,
+      "max_corriente": 5000,
+      "maximo": 5000,
+      "kilos": 368,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": 0,
+        "maximo": -4.76
+      }
+    },
+    "novillitos_391_430": {
+      "min_corriente": 4400,
+      "max_corriente": 4600,
+      "maximo": 4700,
+      "kilos": 424,
+      "changes": {
+        "min_corriente": -2.22,
+        "max_corriente": -4.17,
+        "maximo": -2.08
+      }
+    },
+    "novillitos_regulares": {
+      "min_corriente": 4000,
+      "max_corriente": 4400,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": -4.76,
+        "max_corriente": -2.22,
+        "maximo": null
+      }
+    },
+    "vaquillonas_300_350": {
+      "min_corriente": 4700,
+      "max_corriente": 5000,
+      "maximo": 5000,
+      "kilos": 290,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": 0,
+        "maximo": -4.76
+      }
+    },
+    "vaquillonas_351_390": {
+      "min_corriente": 4200,
+      "max_corriente": 4400,
+      "maximo": 4500,
+      "kilos": 355,
+      "changes": {
+        "min_corriente": -2.33,
+        "max_corriente": -4.35,
+        "maximo": -2.17
+      }
+    },
+    "vaquillonas_391_430": {
+      "min_corriente": null,
+      "max_corriente": null,
+      "maximo": 4270,
+      "kilos": 398,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": null,
+        "maximo": -2.06
+      }
+    },
+    "vaquillonas_regulares": {
+      "min_corriente": 3800,
+      "max_corriente": 4100,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": -2.56,
+        "max_corriente": 0,
+        "maximo": null
+      }
+    },
+    "vacas_buenas_especiales": {
+      "min_corriente": 3300,
+      "max_corriente": 3600,
+      "maximo": 4120,
+      "kilos": 435,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": 0,
+        "maximo": 0.49
+      }
+    },
+    "vacas_regulares": {
+      "min_corriente": 3100,
+      "max_corriente": 3300,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": 0,
+        "maximo": null
+      }
+    },
+    "conserva_buena": {
+      "min_corriente": null,
+      "max_corriente": 2900,
+      "maximo": 3000,
+      "kilos": null,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": 0,
+        "maximo": 0
+      }
+    },
+    "conserva_inferior": {
+      "min_corriente": 2600,
+      "max_corriente": null,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": 0,
+        "max_corriente": null,
+        "maximo": null
+      }
+    },
+    "toros_buenos_especiales": {
+      "min_corriente": null,
+      "max_corriente": 3700,
+      "maximo": 3820,
+      "kilos": 750,
+      "changes": {
+        "min_corriente": null,
+        "max_corriente": 2.78,
+        "maximo": 3.24
+      }
+    },
+    "toros_regulares": {
+      "min_corriente": 3000,
+      "max_corriente": null,
+      "maximo": null,
+      "kilos": null,
+      "changes": {
+        "min_corriente": 7.14,
+        "max_corriente": null,
+        "maximo": null
+      }
+    }
   },
-  "indices": {"inmag_novillo":4155.89,"igmag_general":3971.8,"arrendamiento":4272.84},
-  "indices_changes": {"inmag_novillo":-6.3,"igmag_general":5.1,"arrendamiento":-1.0},
+  "indices": {
+    "inmag_novillo": 4155.89,
+    "igmag_general": 3971.8,
+    "arrendamiento": 4272.84
+  },
+  "indices_changes": {
+    "inmag_novillo": -6.3,
+    "igmag_general": 5.1,
+    "arrendamiento": -1
+  },
   "indices_monthly": {
-    "inmag_novillo":{"mes":"Agosto 2026","promedio":4304.619,"variacion":-0.3},
-    "igmag_general":{"mes":"Agosto 2026","promedio":3834.474,"variacion":3.1},
-    "arrendamiento":{"mes":"Agosto 2026","promedio":4373.766,"variacion":0.5}
+    "inmag_novillo": {
+      "mes": "Agosto 2026",
+      "promedio": 4304.619,
+      "variacion": -0.3
+    },
+    "igmag_general": {
+      "mes": "Agosto 2026",
+      "promedio": 3834.474,
+      "variacion": 3.1
+    },
+    "arrendamiento": {
+      "mes": "Agosto 2026",
+      "promedio": 4373.766,
+      "variacion": 0.5
+    }
   }
 }
