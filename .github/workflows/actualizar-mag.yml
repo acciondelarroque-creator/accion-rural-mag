@@ -2,8 +2,8 @@ name: Actualizar MAG
 
 on:
   schedule:
-    # Actualización automática martes, jueves y viernes a las 11:00 de Argentina (14:00 UTC).
-    - cron: "0 14 * * 2,4,5"
+    # Actualización automática martes, miércoles y viernes a las 11:00 de Argentina (14:00 UTC).
+    - cron: "0 14 * * 2,3,5"
   workflow_dispatch:
 
 permissions:
