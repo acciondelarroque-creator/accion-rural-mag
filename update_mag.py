@@ -247,20 +247,20 @@ def main():
 
     idx, idx_changes, idx_monthly, index_date = obtener_indices(fecha, estado)
 
-    # La comparación se toma siempre de la última rueda publicada que figura en mag.json.
-    # El archivo de estado se conserva para evitar que una ejecución fallida retroceda la referencia.
-    referencia_date = salida_anterior.get("date")
-    referencia_prices = salida_anterior.get("prices", {})
-    if referencia_date and referencia_prices:
-        baseline_date = referencia_date
-        baseline_prices = referencia_prices
-    elif "baseline_date" in estado and "baseline_prices" in estado:
-        if fecha != estado.get("last_date"):
-            baseline_date = estado.get("last_date")
-            baseline_prices = estado.get("last_prices", estado.get("baseline_prices", {}))
-        else:
-            baseline_date = estado.get("baseline_date")
-            baseline_prices = estado.get("baseline_prices", {})
+    # La comparación debe mantenerse contra la rueda anterior aunque Guarino
+    # publique la misma rueda varias veces durante el día.
+    # Si la fecha encontrada es igual a la última fecha guardada en el estado,
+    # usamos la referencia histórica; si es una rueda nueva, tomamos la última
+    # rueda publicada que estaba en mag.json antes del cambio.
+    if fecha == estado.get("last_date") and estado.get("baseline_prices"):
+        baseline_date = estado.get("baseline_date")
+        baseline_prices = estado.get("baseline_prices", {})
+    elif salida_anterior.get("date") and salida_anterior.get("prices"):
+        baseline_date = salida_anterior.get("date")
+        baseline_prices = salida_anterior.get("prices", {})
+    elif estado.get("last_date") and estado.get("last_prices"):
+        baseline_date = estado.get("last_date")
+        baseline_prices = estado.get("last_prices", {})
     else:
         baseline_date = estado.get("date")
         baseline_prices = estado.get("prices", {})
