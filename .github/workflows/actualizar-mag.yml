@@ -2,8 +2,9 @@ name: Actualizar MAG
 
 on:
   schedule:
-    # Actualización automática martes, miércoles y viernes a las 11:00 de Argentina (14:00 UTC).
-    - cron: "0 14 * * 2,3,5"
+    # Actualización martes, miércoles y viernes cada hora de 11:00 a 18:00 de Argentina (14:00 a 21:00 UTC).
+    # Así, si Guarino publica la rueda después de las 11:00, el MAG vuelve a intentarlo durante el día.
+    - cron: "0 14-21 * * 2,3,5"
   workflow_dispatch:
 
 permissions:
