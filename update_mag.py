@@ -228,6 +228,10 @@ def main():
         if not fecha_actual:
             raise RuntimeError("Guarino no informó la fecha de la rueda actual")
         filas_actuales = parsear_tabla(soup_actual)
+        # Nunca retroceder de rueda: si la página principal todavía muestra una
+        # fecha anterior a la última rueda ya guardada, no reemplazamos datos nuevos.
+        if salida_anterior.get("date") and datetime.strptime(fecha_actual, "%d/%m/%Y").date() < datetime.strptime(salida_anterior["date"], "%d/%m/%Y").date():
+            raise RuntimeError(f"La página principal de Guarino muestra {fecha_actual}, anterior a la última rueda guardada {salida_anterior['date']}")
         prices_html = html_actual
         prices_soup = soup_actual
         prices_text = texto_actual
