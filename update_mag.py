@@ -9,6 +9,7 @@ from bs4 import BeautifulSoup
 # Guarino separa la rueda de precios de los índices.
 # Los precios se leen desde Históricos y los índices desde la pestaña histórica.
 HISTORICAL_PRICES_URL = "https://www.grupoguarino.com.ar/historicos/?rmag_tab=pmag&rmag_fecha={}"
+CURRENT_PRICES_URL = "https://www.grupoguarino.com.ar/precios-mag/"
 INDEX_URL = "https://www.grupoguarino.com.ar/historicos/?rmag_tab=indices"
 STATE_FILE = "mag_previous.json"
 OUTPUT_FILE = "mag.json"
@@ -203,41 +204,63 @@ def main():
     prices_url = None
     fecha = None
     ultima_error = None
+    filas = None
 
-    candidato = hoy_ar
-    for retroceso in range(0, 6):
-        if retroceso > 0:
-            candidato = candidato - timedelta(days=1)
-            while candidato.weekday() >= 5:
+    # Primero usamos la página actual de Guarino, que publica la última rueda
+    # realmente disponible. Esto evita depender de URLs históricas que pueden
+    # devolver una rueda anterior aunque se solicite otra fecha.
+    try:
+        url_actual = CURRENT_PRICES_URL + "?accionrural_cache=" + str(int(datetime.now(timezone.utc).timestamp()))
+        html_actual = obtener_pagina(url_actual)
+        soup_actual = BeautifulSoup(html_actual, "html.parser")
+        texto_actual = soup_actual.get_text(" ", strip=True)
+        fecha_actual = fecha_es(texto_actual) or fecha_es(html_actual)
+        if not fecha_actual:
+            raise RuntimeError("Guarino no informó la fecha de la rueda actual")
+        filas_actuales = parsear_tabla(soup_actual)
+        prices_html = html_actual
+        prices_soup = soup_actual
+        prices_text = texto_actual
+        prices_url = url_actual
+        fecha = fecha_actual
+        filas = filas_actuales
+        print(f"Rueda MAG más reciente de Guarino: {fecha}")
+    except Exception as exc:
+        ultima_error = exc
+        print(f"No se pudo leer la página actual de Guarino: {exc}")
+
+    # Respaldo: si la página actual falla, intentamos las fechas históricas.
+    if fecha is None:
+        candidato = hoy_ar
+        for retroceso in range(0, 6):
+            if retroceso > 0:
                 candidato = candidato - timedelta(days=1)
-        fecha_iso = candidato.strftime("%Y-%m-%d")
-        url_candidata = HISTORICAL_PRICES_URL.format(fecha_iso)
-
-        try:
-            html_candidata = obtener_pagina(url_candidata)
-            soup_candidata = BeautifulSoup(html_candidata, "html.parser")
-            texto_candidato = soup_candidata.get_text(" ", strip=True)
-            fecha_candidata = fecha_es(texto_candidato) or fecha_es(html_candidata)
-            if not fecha_candidata:
-                raise RuntimeError("sin fecha")
-            fecha_esperada = candidato.strftime("%d/%m/%Y")
-            if fecha_candidata != fecha_esperada:
-                raise RuntimeError(f"la página solicitada {fecha_esperada} devolvió la rueda {fecha_candidata}")
-            filas_candidatas = parsear_tabla(soup_candidata)
-            prices_html = html_candidata
-            prices_soup = soup_candidata
-            prices_text = texto_candidato
-            prices_url = url_candidata
-            fecha = fecha_candidata
-            print(f"Rueda MAG seleccionada: {fecha} ({url_candidata})")
-            filas = filas_candidatas
-            break
-        except Exception as exc:
-            ultima_error = exc
-            print(f"No disponible {fecha_iso}: {exc}")
+                while candidato.weekday() >= 5:
+                    candidato = candidato - timedelta(days=1)
+            fecha_iso = candidato.strftime("%Y-%m-%d")
+            url_candidata = HISTORICAL_PRICES_URL.format(fecha_iso)
+            try:
+                html_candidata = obtener_pagina(url_candidata)
+                soup_candidata = BeautifulSoup(html_candidata, "html.parser")
+                texto_candidato = soup_candidata.get_text(" ", strip=True)
+                fecha_candidata = fecha_es(texto_candidato) or fecha_es(html_candidata)
+                if not fecha_candidata:
+                    raise RuntimeError("sin fecha")
+                filas_candidatas = parsear_tabla(soup_candidata)
+                prices_html = html_candidata
+                prices_soup = soup_candidata
+                prices_text = texto_candidato
+                prices_url = url_candidata
+                fecha = fecha_candidata
+                filas = filas_candidatas
+                print(f"Rueda MAG seleccionada desde históricos: {fecha} ({url_candidata})")
+                break
+            except Exception as exc:
+                ultima_error = exc
+                print(f"No disponible histórico {fecha_iso}: {exc}")
 
     if fecha is None:
-        raise RuntimeError(f"No se encontró una rueda MAG válida en los últimos días hábiles: {ultima_error}")
+        raise RuntimeError(f"No se encontró una rueda MAG válida: {ultima_error}")
     m = re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas", prices_text, re.I)
     cabezas = int(m.group(1).replace(".", "")) if m else None
     m = re.search(r"([\d.]+)\s+Camiones", prices_text, re.I)
