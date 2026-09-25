@@ -214,7 +214,17 @@ def main():
         html_actual = obtener_pagina(url_actual)
         soup_actual = BeautifulSoup(html_actual, "html.parser")
         texto_actual = soup_actual.get_text(" ", strip=True)
-        fecha_actual = fecha_es(texto_actual) or fecha_es(html_actual)
+        # Exigimos la fecha del encabezado de la rueda MAG. La página contiene otras fechas.
+        m_fecha_mag = re.search(r"Precios(?: del)? MAG\\s*[·—-]\\s*(?:día\\s*)?(\\d{1,2}/\\d{1,2}/\\d{4})", texto_actual, re.I)
+        if not m_fecha_mag:
+            m_fecha_mag = re.search(r"Precios de hacienda del MAG\\s*[—-]\\s*(\\d{1,2}) de ([a-záéíóú]+) de (\\d{4})", texto_actual, re.I)
+        if m_fecha_mag and m_fecha_mag.lastindex == 1:
+            fecha_actual = m_fecha_mag.group(1)
+        elif m_fecha_mag:
+            meses = {"enero":"01","febrero":"02","marzo":"03","abril":"04","mayo":"05","junio":"06","julio":"07","agosto":"08","septiembre":"09","setiembre":"09","octubre":"10","noviembre":"11","diciembre":"12"}
+            fecha_actual = f"{int(m_fecha_mag.group(1)):02d}/{meses[m_fecha_mag.group(2).lower()]}/{m_fecha_mag.group(3)}"
+        else:
+            raise RuntimeError("No se encontró el encabezado específico de la rueda MAG")
         if not fecha_actual:
             raise RuntimeError("Guarino no informó la fecha de la rueda actual")
         filas_actuales = parsear_tabla(soup_actual)
