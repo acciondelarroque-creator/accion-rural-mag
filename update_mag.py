@@ -271,7 +271,7 @@ def main():
 
     if fecha is None:
         raise RuntimeError(f"No se encontró una rueda MAG válida: {ultima_error}")
-    m = re.search(r"Entrada del día\s+([\d.]+)\s+Cabezas", prices_text, re.I)
+    m = re.search(r"(?:Entrada del día\s+)?([\d.]+)\s+(?:Entrada \\(cabezas\\)|Cabezas)", prices_text, re.I)
     cabezas = int(m.group(1).replace(".", "")) if m else None
     m = re.search(r"([\d.]+)\s+Camiones", prices_text, re.I)
     trucks = int(m.group(1).replace(".", "")) if m else None
