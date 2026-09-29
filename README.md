@@ -1,11 +1,21 @@
 # Acción Rural MAG
 
-Repositorio de prueba independiente para obtener precios del Mercado Agroganadero de Cañuelas (MAG) a partir de Guarino.
+Actualización automática de precios del Mercado Agroganadero de Cañuelas (MAG) para Acción Rural.
 
-## Modo prueba
+## Fuente única
 
-Este repositorio **no está conectado a ninguna marquesina ni sitio web**.
+- Precios MAG: Grupo Guarino
+- Índices: Grupo Guarino
+- No se utilizan otras fuentes para completar o reemplazar datos.
 
-La actualización automática está desactivada. El workflow `Prueba MAG` se ejecuta únicamente de forma manual desde GitHub Actions.
+## Actualización automática
 
-Los resultados se guardan en `mag.json` y `mag_previous.json` para poder verificar el extractor antes de conectarlo a cualquier marquesina.
+El workflow consulta Guarino automáticamente los martes, miércoles y viernes desde las 11:00 hasta las 18:00 de Argentina, realizando un nuevo intento cada hora. Si Guarino publica la rueda después de las 11:00, una comprobación posterior la detecta y actualiza `mag.json`.
+
+La marquesina consume directamente `mag.json` y fuerza una consulta sin caché.
+
+## Archivos
+
+- `update_mag.py`: extractor y actualizador.
+- `mag.json`: datos publicados para la marquesina.
+- `mag_previous.json`: estado de comparación.
