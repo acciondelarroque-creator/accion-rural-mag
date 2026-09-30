@@ -215,9 +215,9 @@ def main():
         soup_actual = BeautifulSoup(html_actual, "html.parser")
         texto_actual = soup_actual.get_text(" ", strip=True)
         # Exigimos la fecha del encabezado de la rueda MAG. La página contiene otras fechas.
-        m_fecha_mag = re.search(r"Precios(?: del)? MAG\\s*[·—-]\\s*(?:día\\s*)?(\\d{1,2}/\\d{1,2}/\\d{4})", texto_actual, re.I)
+        m_fecha_mag = re.search(r"Precios(?: del)? MAG\s*[·—-]\s*(?:día\s*)?(\d{1,2}/\d{1,2}/\d{4})", texto_actual, re.I)
         if not m_fecha_mag:
-            m_fecha_mag = re.search(r"Precios de hacienda del MAG\\s*[—-]\\s*(\\d{1,2}) de ([a-záéíóú]+) de (\\d{4})", texto_actual, re.I)
+            m_fecha_mag = re.search(r"Precios de hacienda del MAG\s*[—-]\s*(\d{1,2}) de ([a-záéíóú]+) de (\d{4})", texto_actual, re.I)
         if m_fecha_mag and m_fecha_mag.lastindex == 1:
             fecha_actual = m_fecha_mag.group(1)
         elif m_fecha_mag:
