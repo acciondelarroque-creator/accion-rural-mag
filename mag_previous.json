@@ -414,31 +414,31 @@
     }
   },
   "indices": {
-    "inmag_novillo": 4241.83,
-    "igmag_general": 2921.17,
-    "arrendamiento": 4300.94
+    "inmag_novillo": 4075.73,
+    "igmag_general": 3669.03,
+    "arrendamiento": 4120.39
   },
   "indices_changes": {
-    "inmag_novillo": 4.3,
-    "igmag_general": -27.7,
-    "arrendamiento": 3.2
+    "inmag_novillo": -3.9,
+    "igmag_general": -6.4,
+    "arrendamiento": -4.2
   },
   "indices_monthly": {
     "inmag_novillo": {
-      "mes": "Agosto 2026",
-      "promedio": 4304.619,
-      "variacion": -0.3
+      "mes": "Septiembre 2026",
+      "promedio": 4185.943,
+      "variacion": -2.8
     },
     "igmag_general": {
-      "mes": "Agosto 2026",
-      "promedio": 3834.474,
-      "variacion": 3.1
+      "mes": "Septiembre 2026",
+      "promedio": 3813.499,
+      "variacion": -0.5
     },
     "arrendamiento": {
-      "mes": "Agosto 2026",
-      "promedio": 4373.766,
-      "variacion": 0.5
+      "mes": "Septiembre 2026",
+      "promedio": 4253.48,
+      "variacion": -2.8
     }
   },
-  "index_date": "29/09/2026"
+  "index_date": "02/10/2026"
 }
