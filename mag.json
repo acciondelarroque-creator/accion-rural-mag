@@ -1,13 +1,13 @@
 {
-  "updated": "2026-10-14T14:03:16.851136+00:00",
+  "updated": "2026-10-14T18:18:14.040736+00:00",
   "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
-  "url": "https://www.grupoguarino.com.ar/precios-mag/?accionrural_cache=1791986592",
+  "url": "https://www.grupoguarino.com.ar/precios-mag/?accionrural_cache=1792001888",
   "index_url": "https://www.grupoguarino.com.ar/historicos/?rmag_tab=indices",
   "date": "14/10/2026",
-  "index_date": "13/10/2026",
+  "index_date": "14/10/2026",
   "comparison_date": "13/10/2026",
   "heads": 6756,
-  "trucks": 176,
+  "trucks": 178,
   "week_heads": null,
   "label": "Mín. Corriente / Máx. Corriente / Máximos",
   "categories": {
@@ -243,14 +243,14 @@
     }
   },
   "indices": {
-    "inmag_novillo": 4325.41,
-    "igmag_general": 4154.75,
-    "arrendamiento": 4426.99
+    "inmag_novillo": 4250.49,
+    "igmag_general": 3930.74,
+    "arrendamiento": 4323.93
   },
   "indices_changes": {
-    "inmag_novillo": 8.2,
-    "igmag_general": 2.5,
-    "arrendamiento": 8.9
+    "inmag_novillo": -1.7,
+    "igmag_general": -5.4,
+    "arrendamiento": -2.3
   },
   "indices_monthly": {
     "inmag_novillo": {
