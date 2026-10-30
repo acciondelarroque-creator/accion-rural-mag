@@ -414,14 +414,14 @@
     }
   },
   "indices": {
-    "inmag_novillo": 4095.65,
-    "igmag_general": 3586.42,
-    "arrendamiento": 4135.58
+    "inmag_novillo": 4010.328,
+    "igmag_general": 3714.877,
+    "arrendamiento": 4151.25
   },
   "indices_changes": {
-    "inmag_novillo": -3.0,
-    "igmag_general": -5.3,
-    "arrendamiento": -4.1
+    "inmag_novillo": -2.1,
+    "igmag_general": 3.6,
+    "arrendamiento": 0.4
   },
   "indices_monthly": {
     "inmag_novillo": {
@@ -440,5 +440,5 @@
       "variacion": -2.8
     }
   },
-  "index_date": "28/10/2026"
+  "index_date": "30/10/2026"
 }
