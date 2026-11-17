@@ -1,7 +1,7 @@
 {
   "updated": "2026-11-17T15:43:49.543Z",
   "source": "Guarino Producciones · Mercado Agroganadero de Cañuelas (MAG)",
-  "url": "https://www.grupoguarino.com.ar/historicos/?rmag_tab=pmag&rmag_fecha=2026-11-17",
+  "url": "https://www.grupoguarino.com.ar/precios-mag/",
   "index_url": "https://www.grupoguarino.com.ar/historicos/?rmag_tab=indices",
   "date": "17/11/2026",
   "index_date": "13/11/2026",
@@ -268,5 +268,7 @@
       "promedio": 4186.564,
       "variacion": -1.6
     }
-  }
+  },
+  "market_commentary": "Martes en el MAG: Difícil es poco. La demanda trabajó con profunda selectividad para haciendas con falta o exceso de engorde; las haciendas destacadas se colocaron con mayor agilidad. La vaca no logra repuntar.",
+  "commentary_date": "17/11/2026"
 }
